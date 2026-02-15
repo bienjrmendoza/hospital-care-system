@@ -76,4 +76,23 @@ class ScheduleBrowserController extends Controller
             ->orderBy('start_time')
             ->get();
     }
+
+    public function landingPage(): View
+    {
+        return view('index');
+    }
+    
+    public function about(Request $request): View
+    {
+        $doctors = User::query()
+            ->where('role', User::ROLE_DOCTOR)
+            ->with(['doctorProfile', 'schedules']) 
+            ->orderBy('name')
+            ->get();
+
+        $start = Carbon::parse($request->query('start', now()->startOfWeek()->toDateString()));
+        $end = (clone $start)->addDays(6);
+
+        return view('about', compact('doctors', 'start', 'end'));
+    }
 }
