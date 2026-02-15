@@ -11,6 +11,8 @@ use App\Http\Controllers\ScheduleBrowserController;
 use App\Http\Controllers\UserRequestController;
 use Illuminate\Support\Facades\Route;
 
+Route::view('/home', 'index')->name('index');
+Route::get('/about', [ScheduleBrowserController::class, 'about'])->name('about');
 Route::get('/', [ScheduleBrowserController::class, 'index'])->name('home');
 Route::get('/schedules/feed', [ScheduleBrowserController::class, 'feed'])->name('schedules.feed');
 

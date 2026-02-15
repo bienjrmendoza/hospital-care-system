@@ -1,0 +1,146 @@
+.card { 
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.card-description {
+    display: flex;
+    margin-top: 50px;
+    gap: 20px;
+}
+
+.card-description .card {
+    border: none;
+    opacity: 0.8;
+    width: 100%;
+    height: 300px;
+    justify-content: center;
+}
+
+.hero .card h3 {
+    min-height: 67px;
+}
+
+.hero {
+    background: linear-gradient(0deg, rgba(10, 37, 99, 0.4), rgba(10, 36, 99, 0.4)), url('/assets/images/bg-image.png') no-repeat center center;
+    background-size: cover;
+}
+
+.description {
+    font-size: 25px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+}
+
+.consult-section p {
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+
+.consult-section img {
+    border: 1px solid #0000002d;
+    box-shadow: 10px 10px 7px rgb(0 0 0 / 6%);
+}
+
+.specialized-section {
+    background-color: #f8f8f8;
+}
+
+.specialized-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.specialized-description {
+    margin-bottom: 40px;
+}
+
+.specialized-card i {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.specialized-card p,
+.specialized-description p {
+    margin-bottom: 20px;
+}
+
+.specialized-description h2 {
+    margin-bottom: 20px;
+}
+
+/* ABOUT START */
+.specialists {
+    background-color: #f8f8f8;
+}
+
+.profile i {
+    font-size: 90px;
+}
+
+.profile {
+    align-content: center;
+    height: 200px;
+    text-align: center;
+    background-color: #f8f8f8;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 10px;
+}
+
+.specialists ul {
+    margin-bottom: 0;
+}
+
+.specialists ul {
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+}
+/* ABOUT END */
+
+/* MOBILE START */
+@media screen and (max-width: 1024px) {
+    .hero .card h3 {
+        min-height: unset;
+    }
+
+    .description {
+        max-width: 100%;
+    }
+
+    .hero .card p {
+        margin-bottom: 0 !important;
+    }
+
+    .card-description {
+        flex-direction: column;
+        margin-top: 30px;
+    }
+
+    .card.bg-primary {
+        height: unset;
+    }
+
+    .consult-section img {
+        margin-bottom: 20px;
+    }
+
+    .specialized-card {
+        display: block;
+    }
+
+    .specialized-card .card {
+        margin-bottom: 20px;
+    }
+
+    .specialized-card .card:last-child {
+        margin-bottom: 0;
+    }
+
+    .specialized-description {
+        margin-bottom: 20px;
+    }
+}
+/* MOBILE END */

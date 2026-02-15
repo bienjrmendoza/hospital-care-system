@@ -1,0 +1,160 @@
+:root{
+    --primary: #155edb!important;
+    --secondary: #0a2463!important;
+    --tertiary: #57e0e4!important;
+}
+
+.text-primary {
+    color: var(--primary)!important;
+}
+
+.text-secondary {
+    color: var(--secondary)!important;
+}
+
+.text-tertiary {
+    color: var(--tertiary)!important;
+}
+
+.bg-primary {
+    background-color: var(--primary)!important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary)!important;
+}
+
+.bg-tertiary {
+    background-color: var(--tertiary)!important;
+}
+
+a {
+    color: inherit;
+    text-decoration: auto;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 85px;
+    font-weight: 700;
+    line-height: 90px;
+}
+
+h2 {
+    font-size: 65px;
+    line-height: 65px;
+    font-weight: 700;
+}
+
+.fs-25 {
+    font-size: 25px;
+}
+
+h3, h4 {
+    font-weight: 700!important;
+}
+
+img {
+    width: 100%;
+}
+
+section {
+    padding: 70px 20px;
+}
+
+.secondary-hover:hover {
+    background-color: var(--secondary)!important;
+}
+
+/* HEADER START */
+header {
+    background: #fff;
+    top: 0;
+    z-index: 1000;
+    position: sticky;
+    padding: 5px 20px;
+    box-shadow: 0 20px 15px -30px #00000080;
+}
+
+header img {
+    max-width: 300px;
+}
+
+.button {
+    padding: 20px 50px;
+    border-radius: 50px;
+    border: none;
+    text-transform: uppercase;
+}
+
+.logo img {
+    max-width: 230px;
+}
+
+.menu-links {
+    gap: 50px;
+}
+/* HEADER END */
+
+/* FOOTER START */
+footer {
+    padding: 50px 20px 0 20px;
+}
+
+footer img {
+    max-width: 270px;
+    margin-bottom: 20px;
+}
+
+.social-links i {
+    font-size: 30px;
+}
+/* FOOTER END */
+
+/* MOBILE START */
+@media screen and (max-width: 1024px) {
+    button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    section {
+        padding: 30px 5px;
+    }
+    
+    h1 {
+        font-size: 35px;
+        line-height: 40px;
+    }
+
+    h2 {
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    p {
+        font-size: 16px!important;
+        margin-bottom: 15px!important;
+    }
+
+    header {
+        padding: 10px 5px;
+    }
+
+    header .navbar-toggler {
+        width: auto;
+    }
+
+    .menu-links {
+        gap: 10px;
+    }
+
+    footer {
+        padding: 30px 5px 0 5px;
+    }
+
+    header img {
+        max-width: 200px;
+    }
+}
+/* MOBILE END */
