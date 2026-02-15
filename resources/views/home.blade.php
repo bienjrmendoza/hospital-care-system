@@ -21,7 +21,7 @@
     </div>
     <div class="col-lg-2">
         <label class="form-label">End date</label>
-        <input id="endFilter" type="date" class="form-control shadow-none" value="{{ $end->toDateString() }}">
+        <input id="endFilter" type="date" class="form-control shadow-none" value="{{ $end?->toDateString() }}">
     </div>
     <div class="col-lg-2 d-flex align-items-end">
         <button id="filterBtn" class="btn btn-dark w-100">Apply</button>
@@ -77,4 +77,3 @@ $(function () {
 });
 </script>
 @endpush
-
