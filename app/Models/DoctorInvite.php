@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 class DoctorInvite extends Model
 {
@@ -14,7 +13,7 @@ class DoctorInvite extends Model
     protected $fillable = [
         'name',
         'email',
-        'specialization',
+        'specialization_id',
         'token',
         'expires_at',
         'created_by_admin_id',
@@ -29,6 +28,11 @@ class DoctorInvite extends Model
     public function createdByAdmin(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_admin_id');
+    }
+
+    public function specializationRef(): BelongsTo
+    {
+        return $this->belongsTo(Specialization::class, 'specialization_id');
     }
 
     public function isValid(): bool

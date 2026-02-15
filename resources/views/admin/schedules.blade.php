@@ -20,9 +20,7 @@
     </div>
 </div>
 
-<div id="adminAlert" class="alert d-none"></div>
-
-<div class="card shadow-sm">
+<div class="card shadow-sm" id="adminSchedulesTableWrap">
     <div class="table-responsive">
         <table class="table table-striped mb-0">
             <thead><tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
@@ -51,7 +49,7 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $schedules->links() }}</div>
+<div class="mt-3" id="adminSchedulesPaginationWrap">{{ $schedules->links() }}</div>
 @endsection
 
 @push('scripts')
@@ -59,8 +57,20 @@
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    function show(type, message) {
-        $('#adminAlert').removeClass('d-none alert-success alert-danger').addClass('alert-' + type).text(message);
+    function reloadSchedulesView() {
+        $.get(window.location.href).done(function (html) {
+            const updatedTable = $(html).find('#adminSchedulesTableWrap').html();
+            const updatedPagination = $(html).find('#adminSchedulesPaginationWrap').html();
+
+            if (updatedTable) {
+                $('#adminSchedulesTableWrap').html(updatedTable);
+            }
+            if (updatedPagination !== undefined) {
+                $('#adminSchedulesPaginationWrap').html(updatedPagination);
+            }
+        }).fail(function () {
+            window.showToast('danger', 'Failed to refresh schedules table.');
+        });
     }
 
     $(document).on('click', '.admin-edit', function () {
@@ -78,10 +88,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'PUT', date: date, start_time: start, end_time: end, status: status }
         }).done(function (res) {
-            show('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadSchedulesView();
         }).fail(function (xhr) {
-            show('danger', xhr.responseJSON?.message || 'Update failed.');
+            window.showToast('danger', xhr.responseJSON?.message || 'Update failed.');
         });
     });
 
@@ -95,10 +105,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'DELETE' }
         }).done(function (res) {
-            show('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadSchedulesView();
         }).fail(function () {
-            show('danger', 'Delete failed.');
+            window.showToast('danger', 'Delete failed.');
         });
     });
 });

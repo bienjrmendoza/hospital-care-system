@@ -13,7 +13,12 @@
     </div>
     <div class="col-lg-3">
         <label class="form-label">Specialization</label>
-        <input id="specializationFilter" class="form-control shadow-none" placeholder="e.g. Cardiology">
+        <select id="specializationFilter" class="form-select shadow-none">
+            <option value="">All specializations</option>
+            @foreach($specializations as $specialization)
+                <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-lg-2">
         <label class="form-label">Start date</label>
@@ -28,8 +33,6 @@
     </div>
 </div>
 
-<div id="ajaxAlert" class="alert d-none" role="alert"></div>
-
 <div id="scheduleGrid">
     @include('partials.schedule-grid', ['schedules' => $schedules])
 </div>
@@ -40,20 +43,16 @@
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    function showAlert(type, message) {
-        $('#ajaxAlert').removeClass('d-none alert-success alert-danger').addClass('alert-' + type).text(message);
-    }
-
     function loadSchedules() {
         $.get('{{ route('schedules.feed') }}', {
             doctor_id: $('#doctorFilter').val(),
-            specialization: $('#specializationFilter').val(),
+            specialization_id: $('#specializationFilter').val(),
             start: $('#startFilter').val(),
             end: $('#endFilter').val()
         }).done(function (res) {
             $('#scheduleGrid').html(res.html);
         }).fail(function () {
-            showAlert('danger', 'Failed to load schedules.');
+            window.showToast('danger', 'Failed to load schedules.');
         });
     }
 
@@ -67,11 +66,11 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { schedule_id: scheduleId }
         }).done(function (res) {
-            showAlert('success', res.message);
+            window.showToast('success', res.message);
             loadSchedules();
         }).fail(function (xhr) {
             const message = xhr.responseJSON?.message || 'Request failed.';
-            showAlert('danger', message);
+            window.showToast('danger', message);
         });
     });
 });

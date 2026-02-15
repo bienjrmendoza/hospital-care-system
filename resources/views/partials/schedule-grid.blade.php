@@ -16,7 +16,7 @@
                     <td>{{ $schedule->date->format('Y-m-d') }}</td>
                     <td>{{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}</td>
                     <td>{{ $schedule->doctor->name }}</td>
-                    <td>{{ $schedule->doctor->doctorProfile->specialization ?? 'General' }}</td>
+                    <td>{{ $schedule->doctor->doctorProfile?->specializationRef?->name ?? 'General' }}</td>
                     <td class="text-end">
                         @auth
                             @if(auth()->user()->isUser())

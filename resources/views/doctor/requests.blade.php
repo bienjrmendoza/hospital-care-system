@@ -2,9 +2,8 @@
 
 @section('content')
 <h1 class="h4 mb-3">Doctor Requests Inbox</h1>
-<div id="requestAlert" class="alert d-none"></div>
 
-<div class="card shadow-sm">
+<div class="card shadow-sm" id="doctorRequestsTableWrap">
     <div class="table-responsive">
         <table class="table table-striped mb-0">
             <thead>
@@ -46,8 +45,15 @@
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    function show(type, message) {
-        $('#requestAlert').removeClass('d-none alert-success alert-danger').addClass('alert-' + type).text(message);
+    function reloadRequestsTable() {
+        $.get(window.location.href).done(function (html) {
+            const updated = $(html).find('#doctorRequestsTableWrap').html();
+            if (updated) {
+                $('#doctorRequestsTableWrap').html(updated);
+            }
+        }).fail(function () {
+            window.showToast('danger', 'Failed to refresh requests table.');
+        });
     }
 
     $(document).on('click', '.accept-btn, .decline-btn', function () {
@@ -60,10 +66,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'PATCH' }
         }).done(function (res) {
-            show('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadRequestsTable();
         }).fail(function (xhr) {
-            show('danger', xhr.responseJSON?.message || 'Action failed.');
+            window.showToast('danger', xhr.responseJSON?.message || 'Action failed.');
         });
     });
 });

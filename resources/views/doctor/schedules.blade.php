@@ -5,8 +5,6 @@
     <h1 class="h4 mb-0">Doctor Schedule Manager</h1>
 </div>
 
-<div id="doctorAlert" class="alert d-none"></div>
-
 <div class="card shadow-sm mb-4">
     <div class="card-body">
         <h2 class="h6">Add schedule slots</h2>
@@ -35,7 +33,7 @@
     </div>
 </div>
 
-<div class="card shadow-sm">
+<div class="card shadow-sm" id="doctorSchedulesTableWrap">
     <div class="table-responsive">
         <table class="table table-striped mb-0">
             <thead>
@@ -77,8 +75,15 @@ $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
     let slotIndex = 1;
 
-    function showAlert(type, message) {
-        $('#doctorAlert').removeClass('d-none alert-success alert-danger').addClass('alert-' + type).text(message);
+    function reloadSchedulesTable() {
+        $.get(window.location.href).done(function (html) {
+            const updated = $(html).find('#doctorSchedulesTableWrap').html();
+            if (updated) {
+                $('#doctorSchedulesTableWrap').html(updated);
+            }
+        }).fail(function () {
+            window.showToast('danger', 'Failed to refresh schedules table.');
+        });
     }
 
     $('#addSlotRowBtn').on('click', function () {
@@ -106,10 +111,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: $(this).serialize()
         }).done(function (res) {
-            showAlert('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadSchedulesTable();
         }).fail(function (xhr) {
-            showAlert('danger', xhr.responseJSON?.message || 'Failed to save schedules.');
+            window.showToast('danger', xhr.responseJSON?.message || 'Failed to save schedules.');
         });
     });
 
@@ -128,10 +133,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'PUT', date: date, start_time: start, end_time: end, status: status }
         }).done(function (res) {
-            showAlert('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadSchedulesTable();
         }).fail(function (xhr) {
-            showAlert('danger', xhr.responseJSON?.message || 'Update failed.');
+            window.showToast('danger', xhr.responseJSON?.message || 'Update failed.');
         });
     });
 
@@ -145,10 +150,10 @@ $(function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'DELETE' }
         }).done(function (res) {
-            showAlert('success', res.message);
-            location.reload();
+            window.showToast('success', res.message);
+            reloadSchedulesTable();
         }).fail(function () {
-            showAlert('danger', 'Delete failed.');
+            window.showToast('danger', 'Delete failed.');
         });
     });
 });

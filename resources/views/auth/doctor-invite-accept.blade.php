@@ -10,6 +10,10 @@
                 <form method="POST" action="{{ route('doctor.invites.complete', $invite->token) }}">
                     @csrf
                     <div class="mb-3">
+                        <label class="form-label">Specialization</label>
+                        <input class="form-control shadow-none" value="{{ $invite->specializationRef?->name }}" readonly>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Name</label>
                         <input name="name" class="form-control shadow-none" value="{{ old('name', $invite->name) }}" required>
                     </div>

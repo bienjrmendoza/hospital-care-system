@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DoctorInvite;
 use App\Models\DoctorProfile;
+use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,9 +17,14 @@ class AdminInviteController extends Controller
 {
     public function index(): View
     {
-        $invites = DoctorInvite::query()->latest()->get();
+        $invites = DoctorInvite::query()
+            ->with('specializationRef')
+            ->latest()
+            ->get();
 
-        return view('admin.invites', compact('invites'));
+        $specializations = Specialization::query()->orderBy('name')->get();
+
+        return view('admin.invites', compact('invites', 'specializations'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -26,25 +32,28 @@ class AdminInviteController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'specialization' => ['nullable', 'string', 'max:255'],
+            'specialization_id' => ['required', 'integer', 'exists:specializations,id'],
             'expires_in_days' => ['required', 'integer', 'min:1', 'max:14'],
         ]);
 
         $invite = DoctorInvite::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'specialization' => $data['specialization'] ?? null,
+            'specialization_id' => $data['specialization_id'],
             'token' => Str::random(64),
             'expires_at' => now()->addDays((int) $data['expires_in_days']),
             'created_by_admin_id' => auth()->id(),
         ]);
 
-        return back()->with('success', 'Invite created: ' . route('doctor.invites.accept', $invite->token));
+        return back()->with('success', 'Invite created successfully.');
     }
 
     public function showAccept(string $token): View
     {
-        $invite = DoctorInvite::query()->where('token', $token)->firstOrFail();
+        $invite = DoctorInvite::query()
+            ->with('specializationRef')
+            ->where('token', $token)
+            ->firstOrFail();
 
         abort_unless($invite->isValid(), 410, 'Invite is invalid or expired.');
 
@@ -71,7 +80,7 @@ class AdminInviteController extends Controller
 
             DoctorProfile::create([
                 'user_id' => $user->id,
-                'specialization' => $invite->specialization,
+                'specialization_id' => $invite->specialization_id,
             ]);
 
             $invite->update(['used_at' => now()]);
