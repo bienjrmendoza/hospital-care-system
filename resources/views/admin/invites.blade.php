@@ -9,23 +9,29 @@
             @csrf
             <div class="col-md-3"><input class="form-control shadow-none" name="name" placeholder="Doctor name" required></div>
             <div class="col-md-3"><input class="form-control shadow-none" type="email" name="email" placeholder="Doctor email" required></div>
-            <div class="col-md-3"><input class="form-control shadow-none" name="specialization" placeholder="Specialization"></div>
+            <div class="col-md-3">
+                <select class="form-select shadow-none" name="specialization_id" required>
+                    <option value="">Select specialization</option>
+                    @foreach($specializations as $specialization)
+                        <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="col-md-2"><input class="form-control shadow-none" type="number" name="expires_in_days" min="1" max="14" value="7" required></div>
             <div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Send</button></div>
         </form>
     </div>
 </div>
 
-<div id="shareAlert" class="alert d-none"></div>
-
 <div class="card shadow-sm">
     <div class="table-responsive">
         <table class="table table-striped mb-0">
-            <thead><tr><th>Email</th><th>Share</th><th>Expires</th><th>Used</th></tr></thead>
+            <thead><tr><th>Email</th><th>Specialization</th><th>Share</th><th>Expires</th><th>Used</th></tr></thead>
             <tbody>
             @forelse($invites as $invite)
                 <tr>
                     <td>{{ $invite->email }}</td>
+                    <td>{{ $invite->specializationRef?->name ?? 'N/A' }}</td>
                     <td>
                         <button
                             type="button"
@@ -39,11 +45,11 @@
                             </svg>
                         </button>
                     </td>
-                    <td>{{ $invite->expires_at->format('Y-m-d H:i') }}</td>
-                    <td>{{ $invite->used_at?->format('Y-m-d H:i') ?? 'No' }}</td>
+                    <td>{{ $invite->expires_at->format('F j, Y g:i A') }}</td>
+                    <td>{{ $invite->used_at?->format('F j, Y g:i A') ?? 'No' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="text-center py-4 text-secondary">No invites yet.</td></tr>
+                <tr><td colspan="5" class="text-center py-4 text-secondary">No invites yet.</td></tr>
             @endforelse
             </tbody>
         </table>
@@ -54,21 +60,14 @@
 @push('scripts')
 <script>
 $(function () {
-    function showShareAlert(type, message) {
-        $('#shareAlert')
-            .removeClass('d-none alert-success alert-danger')
-            .addClass('alert-' + type)
-            .text(message);
-    }
-
     $(document).on('click', '.share-invite-btn', async function () {
         const url = $(this).data('url');
 
         try {
             await navigator.clipboard.writeText(url);
-            showShareAlert('success', 'Invite URL copied. Share it with the doctor.');
+            window.showToast('success', 'Invite URL copied. Share it with the doctor.');
         } catch (e) {
-            showShareAlert('danger', 'Copy failed. Here is the URL: ' + url);
+            window.showToast('danger', 'Copy failed. Please try again.');
         }
     });
 });

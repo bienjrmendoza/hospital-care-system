@@ -25,7 +25,7 @@
                 <tr>
                     <td>{{ $admin->name }}</td>
                     <td>{{ $admin->email }}</td>
-                    <td>{{ $admin->created_at->format('Y-m-d H:i') }}</td>
+                    <td>{{ $admin->created_at->format('F j, Y g:i A') }}</td>
                 </tr>
             @endforeach
             </tbody>

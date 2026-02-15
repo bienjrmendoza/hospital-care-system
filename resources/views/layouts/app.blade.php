@@ -45,28 +45,60 @@
 </nav>
 
 <main class="container pb-5">
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     {{ $slot ?? '' }}
     @yield('content')
 </main>
 
+<div class="toast-container position-fixed top-0 end-0 p-3" id="appToastContainer"></div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+window.showToast = function (type, message) {
+    const palette = {
+        success: 'text-bg-success',
+        danger: 'text-bg-danger',
+        warning: 'text-bg-warning',
+        info: 'text-bg-info',
+    };
+
+    const toastClass = palette[type] || 'text-bg-secondary';
+    const id = 'toast-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    const html = `
+        <div id="${id}" class="toast align-items-center border-0 ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">${$('<div>').text(message).html()}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+
+    const $container = $('#appToastContainer');
+    $container.append(html);
+    const el = document.getElementById(id);
+    const toast = new bootstrap.Toast(el, { delay: 3500 });
+    toast.show();
+    el.addEventListener('hidden.bs.toast', function () {
+        el.remove();
+    });
+};
+
+$(function () {
+    @if(session('success'))
+        window.showToast('success', @json(session('success')));
+    @endif
+
+    @if(session('error'))
+        window.showToast('danger', @json(session('error')));
+    @endif
+
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            window.showToast('danger', @json($error));
+        @endforeach
+    @endif
+});
+</script>
 @stack('scripts')
 </body>
 </html>

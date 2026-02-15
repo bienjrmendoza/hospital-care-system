@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminInviteController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\AdminScheduleController;
+use App\Http\Controllers\AdminSpecializationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorRequestController;
@@ -56,6 +57,11 @@ Route::middleware('auth')->group(function (): void {
 
         Route::get('/invites', [AdminInviteController::class, 'index'])->name('admin.invites.index');
         Route::post('/invites', [AdminInviteController::class, 'store'])->name('admin.invites.store');
+
+        Route::get('/specializations', [AdminSpecializationController::class, 'index'])->name('admin.specializations.index');
+        Route::post('/specializations', [AdminSpecializationController::class, 'store'])->name('admin.specializations.store');
+        Route::put('/specializations/{specialization}', [AdminSpecializationController::class, 'update'])->name('admin.specializations.update');
+        Route::delete('/specializations/{specialization}', [AdminSpecializationController::class, 'destroy'])->name('admin.specializations.destroy');
 
         Route::get('/schedules', [AdminScheduleController::class, 'index'])->name('admin.schedules.index');
         Route::put('/schedules/{schedule}', [AdminScheduleController::class, 'update'])->name('admin.schedules.update');

@@ -10,6 +10,7 @@
 <div class="d-flex gap-2">
     <a class="btn btn-dark" href="{{ route('admin.admins.index') }}">Manage Admins</a>
     <a class="btn btn-primary" href="{{ route('admin.invites.index') }}">Invite Doctors</a>
+    <a class="btn btn-outline-primary" href="{{ route('admin.specializations.index') }}">Manage Specializations</a>
     <a class="btn btn-outline-secondary" href="{{ route('admin.schedules.index') }}">Manage Schedules</a>
 </div>
 @endsection

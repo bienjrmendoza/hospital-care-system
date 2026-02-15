@@ -12,11 +12,16 @@ class DoctorProfile extends Model
 
     protected $fillable = [
         'user_id',
-        'specialization',
+        'specialization_id',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function specializationRef(): BelongsTo
+    {
+        return $this->belongsTo(Specialization::class, 'specialization_id');
     }
 }

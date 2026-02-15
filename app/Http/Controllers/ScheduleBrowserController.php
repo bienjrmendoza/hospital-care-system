@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -16,9 +17,10 @@ class ScheduleBrowserController extends Controller
     {
         $doctors = User::query()
             ->where('role', User::ROLE_DOCTOR)
-            ->with('doctorProfile')
+            ->with('doctorProfile.specializationRef')
             ->orderBy('name')
             ->get();
+        $specializations = Specialization::query()->orderBy('name')->get();
 
         $start = Carbon::parse($request->query('start', now()->toDateString()));
         $end = $request->filled('end') ? Carbon::parse($request->query('end')) : null;
@@ -31,6 +33,7 @@ class ScheduleBrowserController extends Controller
 
         return view('home', [
             'doctors' => $doctors,
+            'specializations' => $specializations,
             'start' => $start,
             'end' => $end,
             'schedules' => $schedules,
@@ -41,7 +44,7 @@ class ScheduleBrowserController extends Controller
     {
         $data = $request->validate([
             'doctor_id' => ['nullable', 'integer', 'exists:users,id'],
-            'specialization' => ['nullable', 'string', 'max:255'],
+            'specialization_id' => ['nullable', 'integer', 'exists:specializations,id'],
             'start' => ['required', 'date'],
             'end' => ['nullable', 'date', 'after_or_equal:start'],
         ]);
@@ -58,7 +61,7 @@ class ScheduleBrowserController extends Controller
     private function filteredSchedules(Request $request, string $startDate, ?string $endDate)
     {
         return Schedule::query()
-            ->with(['doctor.doctorProfile'])
+            ->with(['doctor.doctorProfile.specializationRef'])
             ->whereDate('date', '>=', $startDate)
             ->when($endDate, function (Builder $query) use ($endDate): void {
                 $query->whereDate('date', '<=', $endDate);
@@ -67,9 +70,9 @@ class ScheduleBrowserController extends Controller
             ->when($request->filled('doctor_id'), function (Builder $query) use ($request): void {
                 $query->where('doctor_id', (int) $request->query('doctor_id'));
             })
-            ->when($request->filled('specialization'), function (Builder $query) use ($request): void {
+            ->when($request->filled('specialization_id'), function (Builder $query) use ($request): void {
                 $query->whereHas('doctor.doctorProfile', function (Builder $profileQuery) use ($request): void {
-                    $profileQuery->where('specialization', 'like', '%' . $request->query('specialization') . '%');
+                    $profileQuery->where('specialization_id', (int) $request->query('specialization_id'));
                 });
             })
             ->orderBy('date')
