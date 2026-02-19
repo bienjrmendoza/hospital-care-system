@@ -10,12 +10,24 @@ use App\Http\Controllers\DoctorRequestController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\ScheduleBrowserController;
 use App\Http\Controllers\UserRequestController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/home', 'index')->name('index');
 Route::get('/about', [ScheduleBrowserController::class, 'about'])->name('about');
 Route::get('/', [ScheduleBrowserController::class, 'index'])->name('home');
 Route::get('/schedules/feed', [ScheduleBrowserController::class, 'feed'])->name('schedules.feed');
+
+Route::view('/contact', 'contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+Route::get('/test-mail', function() {
+    Mail::raw('This is a test email', function ($message) {
+        $message->to('johnhowellatienza@gmail.com')
+                ->subject('Test Email');
+    });
+    return 'Test email sent!';
+});
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

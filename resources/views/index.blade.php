@@ -29,7 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card-description text-center">
+                            <div class="card-description">
                                 <div class="card bg-primary secondary-hover">
                                     <h3 class="text-white">Appointment Booking</h3>
                                     <p class="text-white">Consult our specialists easily with our advanced online booking system.</p>
@@ -58,8 +58,8 @@
                             <img src="{{ asset('assets/images/second-image.png') }}" />
                         </div>
                         <div class="col-lg-6">
-                            <h2 class="text-secondary">Consult A Doctor Anywhere, Anytime with TABHC</h2>
-                            <p>Schedule and request free consultations easily at  TBAHC with this online website - your convenient online appointment system.</p>
+                            <h2 class="text-secondary">Consult A Doctor Anywhere, Anytime with TABH Care</h2>
+                            <p>Schedule and request free consultations easily at  TABH Care with this online website - your convenient online appointment system.</p>
                             <button class="bg-primary text-white button secondary-hover"><a href="/">Free Consultation ➝</a></button>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="col-lg-12">
                             <div class="specialized-description text-center">
                                 <h2 class="text-secondary">Comprehensive Specialized Medical Care</h2>
-                                <p class="description">We utilize the latest healthcare technologies and professional expertise to ensure the highest standards of medical service for our patients.</p>
+                                <p class="p-width">We utilize the latest healthcare technologies and professional expertise to ensure the highest standards of medical service for our patients.</p>
                                 <button class="bg-primary text-white button secondary-hover"><a href="/">Book Appointment Now ➝</a></button>
                             </div>
                             <div class="specialized-card">

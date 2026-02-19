@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     @push('styles')
         <link rel="stylesheet" href="{{ asset('assets/css/home/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
@@ -32,42 +33,97 @@
                 </section>
                 <section class="specialists">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h2>Our Medical Specialists</h2>
-                                <p class="fs-25">Meet our team of world-class healthcare professionals dedicated to providing the best medical service for your well-being.</p>
-                                <div class="row">
+                        <h2 class="text-secondary">Our Medical Specialists</h2>
+                        <p>Meet our team of world-class healthcare professionals dedicated to providing the best medical service for your well-being.</p>
+                        @if($doctors->count())
+                            <div class="swiper doctorSwiper">
+                                <div class="swiper-wrapper">
                                     @foreach($doctors as $doctor)
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card">
-                                                <div class="profile">
-                                                    <i class="fa-solid fa-user-doctor text-primary"></i>
+                                        <div class="swiper-slide">
+                                            <div class="card text-center p-4">
+                                                <div class="profile mb-3">
+                                                    <i class="fa-solid fa-user-doctor text-primary fa-3x"></i>
                                                 </div>
-                                                <h3 class="card-title text-secondary">{{ $doctor->name }}</h3>
-                                                    @if($doctor->doctorProfile)
-                                                        <p class="card-subtitle text-muted mb-2">
-                                                            {{ $doctor->doctorProfile->specialization ?? 'General' }}
-                                                        </p>
-                                                    @else
-                                                        <p class="card-subtitle text-muted mb-2">General</p>
-                                                    @endif
-                                                <p class="mb-0"><strong>Schedule:</strong></p>
-                                                @if($doctor->schedules->count())
-                                                    <ul>
-                                                        @foreach($doctor->schedules as $schedule)
-                                                            <li>
-                                                                {{ \Carbon\Carbon::parse($schedule->date)->format('l, F j') }} 
-                                                                from {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} 
-                                                                to {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                @else
-                                                    <p class="text-muted">No schedule available</p>
-                                                @endif
+                                                <h4 class="text-secondary">
+                                                    {{ $doctor->name }}
+                                                </h4>
+                                                <p class="mb-0">
+                                                    {{ $doctor->doctorProfile?->specializationRef?->name ?? 'General' }}
+                                                </p>
                                             </div>
                                         </div>
                                     @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <div class="alert alert-warning text-center">
+                                No available specialist.
+                            </div>
+                        @endif
+                    </div>
+                </section>
+                <section class="inpatient" id="inpatient">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <h2 class="text-secondary">Inpatient & Consultation Inquiry</h2>
+                                <p>Thank you for choosing Outpatient Care Center. Please fill out the detailed inquiry form below. Our dedicated medical team will review your information and reach out shortly to coordinate your consultation.</p>
+                                <div class="contact">
+                                    <h5 class="text-secondary">Appointment Hotline</h5>
+                                    <p><i class="fa-solid fa-phone text-secondary"></i> Emergency: <a href="tel:09914946036">09914946036</a></p>
+                                    <h5 class="text-secondary">Medical Records Inquiry</h5>
+                                    <p><i class="fa-solid fa-envelope text-secondary"></i><a href="mailto:care@outpatientcare.com"> care@outpatientcare.com</a></p>
+                                    <h5 class="text-secondary">Outpatient Clinic Address</h5>
+                                    <p><i class="fa-solid fa-location-dot text-secondary"></i> Maharlika Highway, Brgy. Ibabang Dupay, Lucena City, Philippines, 4301</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="contact-form card">
+                                    @if(session('success'))
+                                        <div class="thank-you-box text-center">
+                                            <i class="fa-regular fa-circle-check text-secondary fs-40 mt-2"></i>
+                                            <h3 class="mt-3 text-secondary">Thank You!</h3>
+                                            <p class="mt-3">Your inquiry has been successfully submitted. Our medical team will contact you shortly.</p>
+                                            <button class="bg-primary text-white button secondary-hover" type="submit">
+                                                <a href="#inpatient" onclick="window.location.reload();">
+                                                    Submit Another Inquiry ➝
+                                                </a>
+                                            </button>
+                                        </div>
+                                    @else
+                                        <form action="{{ route('contact.send') }}" method="POST" id="submit-disable">
+                                            @csrf
+                                            <div class="form-group f-group">
+                                                <div class="inner-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" name="first_name" value="{{ old('first_name') }}" required>
+                                                </div>
+                                                <div class="inner-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" name="last_name" value="{{ old('last_name') }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group f-group">
+                                                <div class="inner-group">
+                                                    <label>Email</label>
+                                                    <input type="email" name="email" value="{{ old('email') }}" required>
+                                                </div>
+                                                <div class="inner-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" name="phone" value="{{ old('phone') }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                <input type="text" name="address" value="{{ old('address') }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Message</label>
+                                                <textarea name="message" rows="5" required>{{ old('message') }}</textarea>
+                                            </div>
+                                            <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Submit ➝</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -75,6 +131,34 @@
                 </section>
             @include('include.footer')
         </main>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+    const swiper = new Swiper(".doctorSwiper", {
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 30,
+        speed: 8000,
+        allowTouchMove: true,
+        grabCursor: true,
+
+        autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+        },
+
+        breakpoints: {
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            992: { slidesPerView: 3 }
+        }
+    });
+    
+    document.getElementById('submit-disable').addEventListener('submit', function() {
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'SUBMITTING... <span class="spinner-border spinner-border-sm"></span>';
+    });
+    </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
