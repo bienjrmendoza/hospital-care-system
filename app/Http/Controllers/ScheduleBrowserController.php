@@ -89,13 +89,28 @@ class ScheduleBrowserController extends Controller
     {
         $doctors = User::query()
             ->where('role', User::ROLE_DOCTOR)
-            ->with(['doctorProfile', 'schedules']) 
+            ->with([
+                'doctorProfile.specializationRef',
+                'schedules'
+            ])
             ->orderBy('name')
             ->get();
 
-        $start = Carbon::parse($request->query('start', now()->startOfWeek()->toDateString()));
+        $specializations = Specialization::query()
+            ->orderBy('name')
+            ->get();
+
+        $start = Carbon::parse(
+            $request->query('start', now()->startOfWeek()->toDateString())
+        );
+
         $end = (clone $start)->addDays(6);
 
-        return view('about', compact('doctors', 'start', 'end'));
+        return view('about', [
+            'doctors' => $doctors,
+            'specializations' => $specializations,
+            'start' => $start,
+            'end' => $end,
+        ]);
     }
 }

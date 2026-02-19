@@ -27,15 +27,10 @@
 }
 
 .description {
-    font-size: 25px;
+    font-size: 20px;
     width: 100%;
     max-width: 900px;
-    margin: 0 auto 40px auto;
-}
-
-.consult-section p {
-    margin-bottom: 20px;
-    font-size: 25px;
+    margin: 0 auto 20px auto;
 }
 
 .consult-section img {
@@ -43,7 +38,12 @@
     box-shadow: 10px 10px 7px rgb(0 0 0 / 6%);
 }
 
+.consult-section .col-lg-6:last-child {
+    padding-left: 30px;
+}
+
 .specialized-section {
+    padding: 50px 20px 70px 20px;
     background-color: #f8f8f8;
 }
 
@@ -67,12 +67,25 @@
     margin-bottom: 20px;
 }
 
+.specialized-card p {
+    min-height: 128px;
+}
+
 .specialized-description h2 {
     margin-bottom: 20px;
 }
 
+.f-group {
+    display: flex;
+    gap: 20px;
+}
+
+.inner-group {
+    width: 100%;
+}
+
 /* ABOUT START */
-.specialists {
+.inpatient {
     background-color: #f8f8f8;
 }
 
@@ -84,7 +97,7 @@
     align-content: center;
     height: 200px;
     text-align: center;
-    background-color: #f8f8f8;
+    background-color: #e1f0ff;
     border-radius: 15px 15px 0 0;
     margin-bottom: 10px;
 }
@@ -97,6 +110,63 @@
     margin-bottom: 0;
     padding: 0;
     list-style: none;
+}
+
+.swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+/* .doctorSwiper {
+    -webkit-mask-image: linear-gradient(
+        to right,
+        #00000054 0%,
+        black 8%,
+        black 92%,
+        #00000054 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        #00000054 0%,
+        black 8%,
+        black 92%,
+        #00000054 100%
+    );
+} */
+
+.doctorSwiper .swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+.swiper {
+    margin-top: 20px;
+}
+
+.contact-form {
+    padding: 10px 20px 20px 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid #d1d1d1;
+}
+
+.contact-form label {
+    margin: 10px 0;
+}
+
+.contact-form textarea {
+    margin-bottom: 10px;
+}
+
+.inpatient .contact {
+    margin-top: 30px;
+}
+
+#inpatient .contact p {
+    margin-bottom: 20px;
 }
 /* ABOUT END */
 
@@ -127,12 +197,20 @@
         margin-bottom: 20px;
     }
 
+    .consult-section .col-lg-6:last-child {
+        padding-left: 15px;
+    }
+
     .specialized-card {
         display: block;
     }
 
     .specialized-card .card {
         margin-bottom: 20px;
+    }
+
+    .specialized-card p {
+        min-height: auto;
     }
 
     .specialized-card .card:last-child {
@@ -142,5 +220,35 @@
     .specialized-description {
         margin-bottom: 20px;
     }
+
+    .specialized-card .card h3 {
+        min-height: auto!important;
+    }
+
+    .swiper {
+        margin-top: 0;
+    }
+
+    .f-group {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .inpatient .contact {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .specialized-card .card h3 {
+        min-height: 67px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+/* .doctorSwiper {
+    -webkit-mask-image: none;
+    mask-image: none;
+} */
 }
 /* MOBILE END */
