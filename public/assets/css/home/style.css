@@ -57,7 +57,7 @@
     margin-bottom: 40px;
 }
 
-.specialized-card i {
+.specialized-card .card > i:first-of-type {
     font-size: 40px;
     margin-bottom: 20px;
 }
@@ -236,6 +236,10 @@
 
     .inpatient .contact {
         margin-top: 0;
+    }
+
+    .specialized-section {
+        padding: 20px 5px;
     }
 }
 

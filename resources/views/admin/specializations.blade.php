@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">Specialization Management</h1>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpecializationModal">Add Specialization</button>
+<div class="d-flex justify-content-between align-items-center mb-3 admin-btn">
+    <h3 class="text-secondary mb-0">Specialization Management</h3>
+    <button type="button" class="bg-primary text-white secondary-hover px-5" data-bs-toggle="modal" data-bs-target="#addSpecializationModal">Add Specialization <i class="fa-solid fa-plus"></i></button>
 </div>
 
 <div class="card shadow-sm" id="specializationsTableWrap">
