@@ -9,18 +9,18 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="mainMenu">
                 <ul class="navbar-nav align-items-lg-center menu-links">
-                    <li class="nav-item">
+                    <li class="nav-item text-secondary">
                         <a href="/home">HOME</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item text-secondary">
                         <a href="/about">ABOUT & DOCTORS</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item text-secondary">
                         <a href="/login">ONLINE CONSULTATION LOGIN</a>
                     </li>
                     <li class="nav-item">
                         <button class="bg-primary text-white button secondary-hover">
-                            <a href="/">BOOK APPOINTMENT ➝</a>
+                            <a href="/">BOOK APPOINTMENT <i class="fa-solid fa-arrow-right"></i></a>
                         </button>
                     </li>
                 </ul>

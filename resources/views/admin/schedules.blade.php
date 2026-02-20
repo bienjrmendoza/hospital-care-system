@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="h4 mb-3">Manage Doctor Schedules</h1>
+<h3 class="text-secondary mb-3">Manage Doctor Schedules</h3>
 
 <div class="card shadow-sm mb-3">
-    <div class="card-body">
+    <div class="card-body admin-btn">
         <form method="GET" class="row g-2">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <select class="form-select shadow-none" name="doctor_id">
                     <option value="">All doctors</option>
                     @foreach($doctors as $doctor)
@@ -14,8 +14,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3"><input type="date" class="form-control shadow-none" name="date" value="{{ request('date') }}"></div>
-            <div class="col-md-2"><button class="btn btn-dark w-100" type="submit">Filter</button></div>
+            <div class="col-md-5"><input type="date" class="form-control shadow-none" name="date" value="{{ request('date') }}"></div>
+            <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit">Filter <i class="fa-solid fa-filter"></i></button></div>
         </form>
     </div>
 </div>

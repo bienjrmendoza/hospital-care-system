@@ -11,8 +11,8 @@
                 <div class="contact">
                     <h4 class="text-secondary">Contact Us</h4>
                     <p>Maharlika Highway, Brgy. Ibabang Dupay, Lucena City, Philippines, 4301</p>
-                    <p>Emergency: <a href="tel:09914946036">09914946036</a></p>
-                    <p><a href="mailto:care@outpatientcare.com">care@outpatientcare.com</a></p>
+                    <p>Emergency: <a class="text-secondary" href="tel:09914946036">09914946036</a></p>
+                    <p><a class="text-secondary" href="mailto:care@outpatientcare.com">care@outpatientcare.com</a></p>
                 </div>
             </div>
             <div class="col-lg-3">

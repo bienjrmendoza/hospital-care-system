@@ -147,3 +147,263 @@ a {
 h1, h2, h3, h4, h5, h6, p, body, button, a, span, li, ul {
     font-family: "Poppins", sans-serif;
 }
+
+h1 {
+    font-size: 65px;
+    font-weight: 600;
+    line-height: 70px;
+}
+
+h2 {
+    font-size: 45px;
+    font-weight: 600;
+    line-height: 50px;
+}
+
+.fs-25 {
+    font-size: 25px;
+}
+
+.fs-40 {
+    font-size: 40px;
+}
+
+h3, h4, h5 {
+    font-weight: 600!important;
+}
+
+button, li a, li span {
+    font-weight: 500!important;
+}
+
+p, label, li {
+    font-size: 16px;
+    line-height: 29px;
+}
+
+.button {
+    padding: 20px 50px;
+    border-radius: 50px;
+    border: none;
+    text-transform: uppercase;
+}
+
+.secondary-hover:hover {
+    background-color: var(--secondary)!important;
+}
+
+.secondary-hover {
+    transition: background-color 0.3s ease;
+}
+
+/* HEADER */
+/* HEADER */
+header img {
+    max-width: 300px;
+}
+
+.admin-header {
+    background: #fff;
+    top: 0;
+    z-index: 1000;
+    position: sticky;
+    padding: 5px 20px;
+    box-shadow: 0 20px 15px -30px #00000080;
+}
+
+.admin-header li a, .admin-header li span {
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+
+.menu-links {
+    gap: 40px;
+}
+/* HEADER */
+/* HEADER */
+
+/* DASHBOARD */
+/* DASHBOARD */
+.admin {
+    padding: 50px 20px;
+}
+/* DASHBOARD */
+/* DASHBOARD */
+
+/* LOGIN / REGISTER */
+/* LOGIN / REGISTER */
+.contact-form {
+    padding: 20px;
+}
+
+.contact-form input, .contact-form textarea {
+    padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid #d1d1d1;
+}
+
+#remember {
+    width: auto;
+    margin-right: 10px;
+}
+
+.card {
+    border-radius: 15px;
+}
+/* LOGIN / REGISTER */
+/* LOGIN / REGISTER */
+
+/* TABLE */
+/* TABLE */
+.form-select,
+.form-control {
+    padding: 10px 20px;
+}
+
+.admin .admin-btn button,
+.admin .admin-btn a {
+    padding: 11px 0;
+    border-radius: 6px;
+    border: none;
+    text-transform: uppercase;
+}
+
+.admin th {
+    color: var(--secondary);
+}
+
+.admin .admin-btn td .share-invite-btn {
+    max-width: 55px;
+}
+
+.admin .admin-btn td button {
+    padding: 5px;
+}
+/* TABLE */
+/* TABLE */
+
+/* MOBILE START */
+@media screen and (max-width: 1024px) {
+    h1, h2, h3, h4, h5, p, span {
+        text-align: left!important;
+    }
+
+    .container {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .admin {
+        padding: 30px 5px;
+    }
+    
+    h1 {
+        font-size: 30px;
+        line-height: 40px;
+    }
+
+    h2 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    h3 {
+        font-size: 18px;
+        line-height: 27px;
+    }
+
+    h4 {
+        font-size: 18px;
+        line-height: 27px;
+    }
+
+    h5 {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    p, label, li {
+        font-size: 14px!important;
+        margin-bottom: 15px!important;
+        line-height: 26px;
+    }
+
+    header {
+        padding: 10px 5px;
+    }
+
+    header .navbar-toggler {
+        width: auto;
+    }
+
+    .menu-links {
+        gap: 10px!important;
+    }
+
+    footer {
+        padding: 30px 5px 0 5px;
+    }
+
+    footer div.col-lg-6 p {
+        text-align: left !important;
+    }
+
+    header img {
+        max-width: 200px;
+    }
+
+    .admin .admin-btn td .share-invite-btn {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    header li {
+        font-size: 14px!important;
+    }
+    
+    header img {
+        max-width: 215px!important;
+    }
+
+    .menu-links {
+        gap: 25px;
+    }
+
+    .button {
+        padding: 20px 30px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    /* header li {
+        font-size: 14px!important;
+    }
+    
+    header img {
+        max-width: 215px!important;
+    }
+
+    .menu-links {
+        gap: 25px;
+    }
+
+    .button {
+        padding: 20px 30px;
+    } */
+
+    .container {
+        max-width: 100%;
+    }
+
+    .p-width {
+        max-width: 100%;
+    }
+}
+/* MOBILE END */

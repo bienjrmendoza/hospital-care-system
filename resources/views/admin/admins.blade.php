@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="h4 mb-3">Manage Admins</h1>
+<h3 class="text-secondary mb-3">Manage Admins</h3>
 
 <div class="card shadow-sm mb-4">
-    <div class="card-body">
+    <div class="card-body admin-btn">
         <form method="POST" action="{{ route('admin.admins.store') }}" class="row g-2">
             @csrf
             <div class="col-md-3"><input class="form-control shadow-none" name="name" placeholder="Name" required></div>
             <div class="col-md-3"><input class="form-control shadow-none" type="email" name="email" placeholder="Email" required></div>
             <div class="col-md-2"><input class="form-control shadow-none" type="password" name="password" placeholder="Password" required></div>
             <div class="col-md-2"><input class="form-control shadow-none" type="password" name="password_confirmation" placeholder="Confirm" required></div>
-            <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Create Admin</button></div>
+            <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit">Create Admin <i class="fa-solid fa-plus"></i></button></div>
         </form>
     </div>
 </div>
