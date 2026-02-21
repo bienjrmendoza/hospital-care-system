@@ -29,7 +29,7 @@
         <input id="endFilter" type="date" class="form-control shadow-none" value="{{ $end?->toDateString() }}">
     </div>
     <div class="col-lg-2 d-flex align-items-end admin-btn">
-        <button id="filterBtn" class="bg-primary text-white secondary-hover w-100">Apply <i class="fa-solid fa-floppy-disk"></i></button>
+        <button id="filterBtn" class="bg-primary text-white secondary-hover w-100"><i class="fa-solid fa-floppy-disk"></i> Apply</button>
     </div>
 </div>
 

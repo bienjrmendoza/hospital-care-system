@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="back-btn admin-btn mb-3">
+    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+</div>
 <h3 class="text-secondary mb-3">Manage Admins</h3>
 
 <div class="card shadow-sm mb-4">
@@ -11,7 +14,7 @@
             <div class="col-md-3"><input class="form-control shadow-none" type="email" name="email" placeholder="Email" required></div>
             <div class="col-md-2"><input class="form-control shadow-none" type="password" name="password" placeholder="Password" required></div>
             <div class="col-md-2"><input class="form-control shadow-none" type="password" name="password_confirmation" placeholder="Confirm" required></div>
-            <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit">Create Admin <i class="fa-solid fa-plus"></i></button></div>
+            <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit"><i class="fa-solid fa-plus"></i> Create Admin</button></div>
         </form>
     </div>
 </div>

@@ -5,10 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'To All Beneficiaries Of Hospital Care' }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 <body class="bg-light">
 <header class="admin-header">
@@ -41,10 +61,10 @@
                             <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('user.dashboard') }}">My Requests</a></li>
                         @endif
                         @if(auth()->user()->isDoctor())
-                            <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('doctor.dashboard') }}">Doctor Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('doctor.dashboard') }}">Dashboard</a></li>
                         @endif
                         @if(auth()->user()->isAdmin())
-                            <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                         @endif
                     @endauth
                     @guest
@@ -120,6 +140,19 @@ $(function () {
         @endforeach
     @endif
 });
+
+document.getElementById('backBtn').addEventListener('click', function() {
+    window.history.back();
+});
+
+@if(session('admin_email_notification'))
+    toastr.info("{{ session('admin_email_notification') }}", "Admin Alert", {
+        positionClass: 'toast-top-right',
+        timeOut: 5000,
+        closeButton: true,
+        progressBar: true
+    });
+@endif
 </script>
 @stack('scripts')
 </body>

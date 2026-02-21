@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="back-btn admin-btn mb-3">
+    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+</div>
 <div class="d-flex justify-content-between align-items-center mb-3 admin-btn">
     <h3 class="text-secondary mb-0">Specialization Management</h3>
-    <button type="button" class="bg-primary text-white secondary-hover px-5" data-bs-toggle="modal" data-bs-target="#addSpecializationModal">Add Specialization <i class="fa-solid fa-plus"></i></button>
+    <button type="button" class="bg-primary text-white secondary-hover px-5" data-bs-toggle="modal" data-bs-target="#addSpecializationModal"><i class="fa-solid fa-plus"></i> Add Specialization</button>
 </div>
 
 <div class="card shadow-sm" id="specializationsTableWrap">
@@ -64,7 +67,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn bg-primary text-white secondary-hover">Save</button>
                 </div>
             </form>
         </div>
@@ -76,7 +79,7 @@
         <div class="modal-content">
             <form id="editSpecializationForm">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-5">Edit Specialization</h2>
+                    <h2 class="modal-title fs-5 text-secondary">Edit Specialization</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -97,7 +100,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title fs-5">Delete Specialization</h2>
+                <h2 class="modal-title fs-5 text-secondary">Delete Specialization</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

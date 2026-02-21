@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">My Schedule Requests</h1>
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="text-secondary mb-3">My Schedule Requests</h3>
 </div>
 
 <div class="card shadow-sm">
@@ -24,7 +24,17 @@
                     <td>{{ $request->schedule?->date?->format('Y-m-d') }}</td>
                     <td>{{ substr($request->schedule?->start_time ?? '', 0, 5) }} - {{ substr($request->schedule?->end_time ?? '', 0, 5) }}</td>
                     <td>{{ $request->schedule?->doctor?->name }}</td>
-                    <td><span class="badge text-bg-secondary">{{ $request->status }}</span></td>
+                    <td>
+                        @if($request->status === 'pending')
+                            <span class="badge text-bg-warning">{{ $request->status }}</span>
+                        @elseif($request->status === 'accepted')
+                            <span class="badge text-bg-success">{{ $request->status }}</span>
+                        @elseif($request->status === 'cancelled')
+                            <span class="badge text-bg-secondary">{{ $request->status }}</span>
+                        @elseif($request->status === 'declined')
+                            <span class="badge text-bg-danger">{{ $request->status }}</span>
+                        @endif
+                    </td>
                     <td>{{ $request->notes }}</td>
                     <td class="text-end">
                         @if($request->status === 'pending')

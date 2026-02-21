@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="h4 mb-3">Doctor Requests Inbox</h1>
+<div class="back-btn admin-btn mb-3">
+    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+</div>
+<h3 class="text-secondary mb-3">Doctor Requests Inbox</h3>
 
 <div class="card shadow-sm" id="doctorRequestsTableWrap">
     <div class="table-responsive">
@@ -22,7 +25,17 @@
                     <td>{{ $request->user->name }}</td>
                     <td>{{ $request->schedule->date->format('Y-m-d') }}</td>
                     <td>{{ substr($request->schedule->start_time, 0, 5) }} - {{ substr($request->schedule->end_time, 0, 5) }}</td>
-                    <td><span class="badge text-bg-secondary">{{ $request->status }}</span></td>
+                    <td>
+                        @if($request->status === 'pending')
+                            <span class="badge text-bg-warning">{{ $request->status }}</span>
+                        @elseif($request->status === 'accepted')
+                            <span class="badge text-bg-success">{{ $request->status }}</span>
+                        @elseif($request->status === 'cancelled')
+                            <span class="badge text-bg-secondary">{{ $request->status }}</span>
+                        @elseif($request->status === 'declined')
+                            <span class="badge text-bg-danger">{{ $request->status }}</span>
+                        @endif
+                    </td>
                     <td>{{ $request->notes }}</td>
                     <td class="text-end">
                         @if($request->status === 'pending')
