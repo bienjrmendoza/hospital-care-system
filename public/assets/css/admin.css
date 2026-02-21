@@ -176,13 +176,18 @@ button, li a, li span {
     font-weight: 500!important;
 }
 
+button {
+    text-transform: uppercase!important;
+    font-size: 16px!important;
+}
+
 p, label, li {
     font-size: 16px;
     line-height: 29px;
 }
 
 .button {
-    padding: 20px 50px;
+    padding: 15px 50px;
     border-radius: 50px;
     border: none;
     text-transform: uppercase;
@@ -225,7 +230,7 @@ header img {
 /* DASHBOARD */
 /* DASHBOARD */
 .admin {
-    padding: 50px 20px;
+    padding: 30px 20px;
 }
 /* DASHBOARD */
 /* DASHBOARD */
@@ -263,8 +268,8 @@ header img {
 
 .admin .admin-btn button,
 .admin .admin-btn a {
-    padding: 11px 0;
-    border-radius: 6px;
+    padding: 15px 20px;
+    border-radius: 50px;
     border: none;
     text-transform: uppercase;
 }
@@ -280,9 +285,36 @@ header img {
 .admin .admin-btn td button {
     padding: 5px;
 }
-/* TABLE */
-/* TABLE */
 
+td button {
+    font-size: 14px!important;
+    width: auto;
+    margin-bottom: 10px
+}
+/* TABLE */
+/* TABLE */
+.card-primary-hover:hover h5 {
+    color: #fff !important;
+}
+
+.card-primary-hover {
+    transition: background-color 0.3s ease;
+}
+
+.card-primary-hover:hover {
+    background: var(--primary);
+    border-radius: 15px;
+    color: #fff !important;
+}
+
+.shadow-sm {
+    box-shadow: none !important;
+}
+
+#addScheduleForm button,
+.modal-content button {
+    padding: 10px 20px;
+}
 /* MOBILE START */
 @media screen and (max-width: 1024px) {
     h1, h2, h3, h4, h5, p, span {
@@ -366,6 +398,7 @@ header img {
 @media screen and (max-width: 1400px) {
     header li {
         font-size: 14px!important;
+        margin-bottom: 0 !important;
     }
     
     header img {
@@ -373,11 +406,15 @@ header img {
     }
 
     .menu-links {
-        gap: 25px;
+        gap: 25px!important;
     }
 
     .button {
-        padding: 20px 30px;
+        padding: 15px 30px;
+    }
+
+    button {
+        font-size: 14px!important;
     }
 }
 

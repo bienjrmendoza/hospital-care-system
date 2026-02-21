@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">Doctor Schedule Manager</h1>
+<div class="back-btn admin-btn mb-3">
+    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+</div>
+<div class="d-flex justify-content-between align-items-center ">
+    <h3 class="text-secondary mb-3">Doctor Schedule Manager</h3>
 </div>
 
 <div class="card shadow-sm mb-4">
@@ -20,14 +23,14 @@
                         <div class="row g-2 slot-row">
                             <div class="col-md-5"><input type="time" class="form-control shadow-none" name="slots[0][start_time]" required></div>
                             <div class="col-md-5"><input type="time" class="form-control shadow-none" name="slots[0][end_time]" required></div>
-                            <div class="col-md-2"><button class="btn btn-outline-danger w-100 remove-slot" type="button">Remove</button></div>
+                            <div class="col-md-2"><button class="btn btn-outline-danger w-100 remove-slot" type="button"><i class="fa-solid fa-trash"></i> Remove</button></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <button id="addSlotRowBtn" class="btn btn-outline-secondary" type="button">Add slot row</button>
-                <button class="btn btn-primary" type="submit">Save slots</button>
+                <button id="addSlotRowBtn" class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-plus"></i> Add slot </button>
+                <button class="btn bg-primary text-white secondary-hover" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save slots</button>
             </div>
         </form>
     </div>

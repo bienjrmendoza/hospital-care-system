@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="back-btn admin-btn mb-3">
+    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+</div>
 <h3 class="text-secondary mb-3">Invite Doctors</h3>
 
 <div class="card shadow-sm mb-4">
@@ -17,8 +20,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2"><input class="form-control shadow-none" type="number" name="expires_in_days" min="1" max="14" value="7" required></div>
-            <div class="col-md-1"><button class="bg-primary text-white secondary-hover w-100" type="submit">Send <i class="fa-solid fa-plus"></i></button></div>
+            <div class="col-md-1"><input class="form-control shadow-none" type="number" name="expires_in_days" min="1" max="14" value="7" required></div>
+            <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit"><i class="fa-solid fa-plus"></i> Send</button></div>
         </form>
     </div>
 </div>
