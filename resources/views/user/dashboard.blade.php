@@ -26,13 +26,13 @@
                     <td>{{ $request->schedule?->doctor?->name }}</td>
                     <td>
                         @if($request->status === 'pending')
-                            <span class="badge text-bg-warning">{{ $request->status }}</span>
+                            <span class="badge text-bg-warning">{{ ucfirst($request->status) }}</span>
                         @elseif($request->status === 'accepted')
-                            <span class="badge text-bg-success">{{ $request->status }}</span>
+                            <span class="badge text-bg-success">{{ ucfirst($request->status) }}</span>
                         @elseif($request->status === 'cancelled')
-                            <span class="badge text-bg-secondary">{{ $request->status }}</span>
+                            <span class="badge text-bg-secondary">{{ ucfirst($request->status) }}</span>
                         @elseif($request->status === 'declined')
-                            <span class="badge text-bg-danger">{{ $request->status }}</span>
+                            <span class="badge text-bg-danger">{{ ucfirst($request->status) }}</span>
                         @endif
                     </td>
                     <td>{{ $request->notes }}</td>
@@ -54,4 +54,3 @@
     </div>
 </div>
 @endsection
-

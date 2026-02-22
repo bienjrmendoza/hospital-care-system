@@ -3,6 +3,15 @@
 @section('content')
 <div class="row g-3 mb-4">
     <div class="col-lg-4">
+        <label class="form-label">Specialization</label>
+        <select id="specializationFilter" class="form-select shadow-none">
+            <option value="">All specializations</option>
+            @foreach($specializations as $specialization)
+                <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-lg-4">
         <label class="form-label">Doctor</label>
         <select id="doctorFilter" class="form-select shadow-none">
             <option value="">All doctors</option>
@@ -12,20 +21,8 @@
         </select>
     </div>
     <div class="col-lg-4">
-        <label class="form-label">Specialization</label>
-        <select id="specializationFilter" class="form-select shadow-none">
-            <option value="">All specializations</option>
-            @foreach($specializations as $specialization)
-                <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-lg-2">
         <label class="form-label">Date</label>
         <input id="startFilter" type="date" class="form-control shadow-none" value="{{ $start->toDateString() }}">
-    </div>
-    <div class="col-lg-2 d-flex align-items-end admin-btn">
-        <button id="filterBtn" class="bg-primary text-white secondary-hover w-100"><i class="fa-solid fa-floppy-disk"></i> Apply</button>
     </div>
 </div>
 
@@ -49,7 +46,7 @@ $(function () {
         });
     }
 
-    $('#filterBtn').on('click', loadDoctors);
+    $('#specializationFilter, #doctorFilter, #startFilter').on('change', loadDoctors);
 });
 </script>
 @endpush

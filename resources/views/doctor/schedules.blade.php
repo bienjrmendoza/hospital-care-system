@@ -50,8 +50,8 @@
             <tbody>
             @forelse($schedules as $schedule)
                 <tr>
-                    <td>{{ $schedule->date->format('Y-m-d') }}</td>
-                    <td>{{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}</td>
+                    <td>{{ $schedule->date->format('F j, Y') }}</td>
+                    <td>{{ \Illuminate\Support\Carbon::parse($schedule->start_time)->format('g:i A') }} - {{ \Illuminate\Support\Carbon::parse($schedule->end_time)->format('g:i A') }}</td>
                     <td><span class="badge text-bg-secondary">{{ $schedule->status }}</span></td>
                     <td class="text-end">
                         <button class="btn btn-sm btn-outline-primary edit-schedule"
