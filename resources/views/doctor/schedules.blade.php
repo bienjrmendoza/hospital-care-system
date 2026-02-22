@@ -155,11 +155,10 @@ $(function () {
         }).done(function (res) {
             window.showToast('success', res.message);
             reloadSchedulesTable();
-        }).fail(function () {
-            window.showToast('danger', 'Delete failed.');
+        }).fail(function (xhr) {
+            window.showToast('danger', xhr.responseJSON?.message || 'Delete failed.');
         });
     });
 });
 </script>
 @endpush
-

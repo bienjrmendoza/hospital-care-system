@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/specialization.css') }}">
+@endpush
+
 @section('content')
 <div class="back-btn admin-btn mb-3">
     <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
@@ -9,47 +13,19 @@
     <button type="button" class="bg-primary text-white secondary-hover px-5" data-bs-toggle="modal" data-bs-target="#addSpecializationModal"><i class="fa-solid fa-plus"></i> Add Specialization</button>
 </div>
 
-<div class="card shadow-sm" id="specializationsTableWrap">
-    <div class="table-responsive">
-        <table class="table table-striped mb-0">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Created</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse($specializations as $specialization)
-                <tr>
-                    <td>{{ $specialization->name }}</td>
-                    <td>{{ $specialization->created_at->format('F j, Y g:i A') }}</td>
-                    <td class="text-end">
-                        <button
-                            type="button"
-                            class="btn btn-sm btn-outline-primary edit-specialization-btn"
-                            data-id="{{ $specialization->id }}"
-                            data-name="{{ $specialization->name }}"
-                        >
-                            Edit
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-sm btn-outline-danger delete-specialization-btn"
-                            data-id="{{ $specialization->id }}"
-                            data-name="{{ $specialization->name }}"
-                        >
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" class="text-center text-secondary py-4">No specializations found.</td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
+<div class="card shadow-sm" id="specializationsTableCard">
+    <div class="card-body pb-2">
+        <div class="table-responsive">
+            <table id="specializationsTable" class="table table-striped mb-0 w-100">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -116,6 +92,8 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -129,15 +107,68 @@ $(function () {
 
     let deleteId = null;
 
-    function reloadSpecializationsTable() {
-        $.get(window.location.href).done(function (html) {
-            const updated = $(html).find('#specializationsTableWrap').html();
-            if (updated) {
-                $('#specializationsTableWrap').html(updated);
+    const table = $('#specializationsTable').DataTable({
+        ajax: {
+            url: '{{ route('admin.specializations.feed') }}',
+            dataSrc: 'data'
+        },
+        dom: "<'row g-3 align-items-center mb-3'<'col-md-6'l><'col-md-6'f>>" +
+             "t" +
+             "<'row g-3 align-items-center mt-2'<'col-md-6'i><'col-md-6'p>>",
+        order: [],
+        columns: [
+            { data: 'name' },
+            {
+                data: 'created_at',
+                render: function (data, type, row) {
+                    if (type === 'sort' || type === 'type') {
+                        return row.created_at_sort;
+                    }
+                    return data;
+                }
+            },
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                className: 'text-end',
+                render: function (_, __, row) {
+                    const safeName = $('<div>').text(row.name).html();
+
+                    return `
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary edit-specialization-btn"
+                            data-id="${row.id}"
+                            data-name="${safeName}"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger delete-specialization-btn"
+                            data-id="${row.id}"
+                            data-name="${safeName}"
+                        >
+                            Delete
+                        </button>
+                    `;
+                }
             }
-        }).fail(function () {
-            window.showToast('danger', 'Failed to refresh specializations table.');
-        });
+        ]
+    });
+
+    function showRequestErrors(xhr, fallbackMessage) {
+        const errors = xhr.responseJSON?.errors;
+
+        if (errors) {
+            Object.values(errors).flat().forEach(function (message) {
+                window.showToast('danger', message);
+            });
+            return;
+        }
+
+        window.showToast('danger', xhr.responseJSON?.message || fallbackMessage);
     }
 
     $('#addSpecializationForm').on('submit', function (e) {
@@ -152,9 +183,9 @@ $(function () {
             window.showToast('success', res.message);
             addModal.hide();
             $('#addSpecializationForm')[0].reset();
-            reloadSpecializationsTable();
+            table.ajax.reload(null, false);
         }).fail(function (xhr) {
-            window.showToast('danger', xhr.responseJSON?.message || 'Create failed.');
+            showRequestErrors(xhr, 'Create failed.');
         });
     });
 
@@ -177,9 +208,9 @@ $(function () {
         }).done(function (res) {
             window.showToast('success', res.message);
             editModal.hide();
-            reloadSpecializationsTable();
+            table.ajax.reload(null, false);
         }).fail(function (xhr) {
-            window.showToast('danger', xhr.responseJSON?.message || 'Update failed.');
+            showRequestErrors(xhr, 'Update failed.');
         });
     });
 
@@ -200,9 +231,9 @@ $(function () {
         }).done(function (res) {
             window.showToast('success', res.message);
             deleteModal.hide();
-            reloadSpecializationsTable();
+            table.ajax.reload(null, false);
         }).fail(function (xhr) {
-            window.showToast('danger', xhr.responseJSON?.message || 'Delete failed.');
+            showRequestErrors(xhr, 'Delete failed.');
         });
     });
 });

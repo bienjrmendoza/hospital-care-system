@@ -6,6 +6,7 @@ use App\Models\DoctorInvite;
 use App\Models\DoctorProfile;
 use App\Models\Specialization;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +18,37 @@ class AdminInviteController extends Controller
 {
     public function index(): View
     {
+        $specializations = Specialization::query()->orderBy('name')->get();
+
+        return view('admin.invites', compact('specializations'));
+    }
+
+    public function feed(): JsonResponse
+    {
         $invites = DoctorInvite::query()
             ->with('specializationRef')
             ->latest()
-            ->get();
+            ->get()
+            ->map(function (DoctorInvite $invite): array {
+                return [
+                    'email' => $invite->email,
+                    'specialization' => $invite->specializationRef?->name ?? 'N/A',
+                    'share_url' => route('doctor.invites.accept', $invite->token),
+                    'expires_at' => $invite->expires_at?->format('F j, Y g:i A') ?? 'N/A',
+                    'expires_at_sort' => $invite->expires_at?->timestamp ?? 0,
+                    'used_at' => $invite->used_at?->format('F j, Y g:i A') ?? 'No',
+                    'used_at_sort' => $invite->used_at?->timestamp ?? 0,
+                    'is_used' => $invite->used_at !== null,
+                ];
+            })
+            ->values();
 
-        $specializations = Specialization::query()->orderBy('name')->get();
-
-        return view('admin.invites', compact('invites', 'specializations'));
+        return response()->json([
+            'data' => $invites,
+        ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): JsonResponse|RedirectResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -44,6 +65,24 @@ class AdminInviteController extends Controller
             'expires_at' => now()->addDays((int) $data['expires_in_days']),
             'created_by_admin_id' => auth()->id(),
         ]);
+        $invite->load('specializationRef');
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invite created successfully.',
+                'invite' => [
+                    'email' => $invite->email,
+                    'specialization' => $invite->specializationRef?->name ?? 'N/A',
+                    'share_url' => route('doctor.invites.accept', $invite->token),
+                    'expires_at' => $invite->expires_at?->format('F j, Y g:i A') ?? 'N/A',
+                    'expires_at_sort' => $invite->expires_at?->timestamp ?? 0,
+                    'used_at' => $invite->used_at?->format('F j, Y g:i A') ?? 'No',
+                    'used_at_sort' => $invite->used_at?->timestamp ?? 0,
+                    'is_used' => false,
+                ],
+            ]);
+        }
 
         return back()->with('success', 'Invite created successfully.');
     }

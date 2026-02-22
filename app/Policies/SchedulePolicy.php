@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Schedule;
+use App\Models\ScheduleRequest;
 use App\Models\User;
 
 class SchedulePolicy
@@ -37,6 +38,12 @@ class SchedulePolicy
 
     public function delete(User $user, Schedule $schedule): bool
     {
-        return $this->update($user, $schedule);
+        if (! $this->update($user, $schedule)) {
+            return false;
+        }
+
+        return ! $schedule->requests()
+            ->where('status', ScheduleRequest::STATUS_ACCEPTED)
+            ->exists();
     }
 }

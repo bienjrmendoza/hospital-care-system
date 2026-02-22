@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Models\ScheduleRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -86,6 +87,16 @@ class DoctorScheduleController extends Controller
     public function destroy(Schedule $schedule): JsonResponse
     {
         $this->authorize('delete', $schedule);
+
+        $hasAcceptedRequest = $schedule->requests()
+            ->where('status', ScheduleRequest::STATUS_ACCEPTED)
+            ->exists();
+
+        if ($hasAcceptedRequest) {
+            return response()->json([
+                'message' => 'This schedule already has an accepted booking and cannot be deleted.',
+            ], 422);
+        }
 
         $schedule->delete();
 

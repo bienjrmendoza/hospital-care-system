@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
@@ -23,12 +24,29 @@ class AdminManagementController extends Controller
 
     public function indexAdmins(): View
     {
-        $admins = User::query()->where('role', User::ROLE_ADMIN)->latest()->get();
-
-        return view('admin.admins', compact('admins'));
+        return view('admin.admins');
     }
 
-    public function storeAdmin(Request $request): RedirectResponse
+    public function adminsFeed(): JsonResponse
+    {
+        $admins = User::query()
+            ->where('role', User::ROLE_ADMIN)
+            ->latest()
+            ->get()
+            ->map(fn (User $admin): array => [
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'created_at' => $admin->created_at->format('F j, Y g:i A'),
+                'created_at_sort' => $admin->created_at->timestamp,
+            ])
+            ->values();
+
+        return response()->json([
+            'data' => $admins,
+        ]);
+    }
+
+    public function storeAdmin(Request $request): JsonResponse|RedirectResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -42,6 +60,13 @@ class AdminManagementController extends Controller
             'password' => $data['password'],
             'role' => User::ROLE_ADMIN,
         ]);
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Admin created.',
+            ]);
+        }
 
         return back()->with('success', 'Admin created.');
     }

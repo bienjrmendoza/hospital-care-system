@@ -8,51 +8,38 @@
 
 <div class="card shadow-sm mb-3">
     <div class="card-body admin-btn">
-        <form method="GET" class="row g-2">
+        <form id="adminScheduleFilterForm" class="row g-2">
             <div class="col-md-5">
-                <select class="form-select shadow-none" name="doctor_id">
+                <select class="form-select shadow-none" name="doctor_id" id="filterDoctorId">
                     <option value="">All doctors</option>
                     @foreach($doctors as $doctor)
-                        <option value="{{ $doctor->id }}" @selected(request('doctor_id') == $doctor->id)>{{ $doctor->name }}</option>
+                        <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-5"><input type="date" class="form-control shadow-none" name="date" value="{{ request('date') }}"></div>
+            <div class="col-md-5"><input type="date" class="form-control shadow-none" name="date" id="filterDate"></div>
             <div class="col-md-2"><button class="bg-primary text-white secondary-hover w-100" type="submit"><i class="fa-solid fa-filter"></i> Filter</button></div>
         </form>
     </div>
 </div>
 
-<div class="card shadow-sm" id="adminSchedulesTableWrap">
-    <div class="table-responsive">
-        <table class="table table-striped mb-0">
-            <thead><tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
-            <tbody>
-            @forelse($schedules as $schedule)
-                <tr>
-                    <td>{{ $schedule->doctor->name }}</td>
-                    <td>{{ $schedule->date->format('Y-m-d') }}</td>
-                    <td>{{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}</td>
-                    <td>{{ $schedule->status }}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary admin-edit"
-                                data-id="{{ $schedule->id }}"
-                                data-date="{{ $schedule->date->toDateString() }}"
-                                data-start="{{ substr($schedule->start_time, 0, 5) }}"
-                                data-end="{{ substr($schedule->end_time, 0, 5) }}"
-                                data-status="{{ $schedule->status }}">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger admin-delete" data-id="{{ $schedule->id }}">Delete</button>
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="5" class="text-center py-4 text-secondary">No schedules found.</td></tr>
-            @endforelse
-            </tbody>
-        </table>
+<div class="card shadow-sm" id="adminSchedulesTableCard">
+    <div class="card-body pb-2">
+        <div class="table-responsive">
+            <table id="adminSchedulesTable" class="table table-striped mb-0 w-100">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
-
-<div class="mt-3" id="adminSchedulesPaginationWrap">{{ $schedules->links() }}</div>
 
 <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -121,37 +108,122 @@
 @endsection
 
 @push('scripts')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+<style>
+#adminSchedulesTableCard .dataTables_wrapper .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#adminSchedulesTableCard .dataTables_length label,
+#adminSchedulesTableCard .dataTables_filter label {
+    margin-bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+#adminSchedulesTableCard .dataTables_filter {
+    text-align: right;
+}
+
+#adminSchedulesTableCard .dataTables_filter input,
+#adminSchedulesTableCard .dataTables_length select {
+    width: auto;
+    min-width: 90px;
+    box-shadow: none !important;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    height: 34px;
+    border-radius: 0.375rem;
+}
+
+#adminSchedulesTableCard .dataTables_filter input:focus,
+#adminSchedulesTableCard .dataTables_length select:focus {
+    box-shadow: none !important;
+}
+
+#adminSchedulesTableCard .dataTables_info,
+#adminSchedulesTableCard .dataTables_paginate {
+    margin-top: .75rem;
+}
+
+@media (max-width: 768px) {
+    #adminSchedulesTableCard .dataTables_length,
+    #adminSchedulesTableCard .dataTables_filter,
+    #adminSchedulesTableCard .dataTables_info,
+    #adminSchedulesTableCard .dataTables_paginate {
+        text-align: left;
+    }
+}
+</style>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
 $(function () {
-
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
     let deleteId = null;
 
     const editModal = new bootstrap.Modal(document.getElementById('editScheduleModal'));
     const deleteModal = new bootstrap.Modal(document.getElementById('deleteScheduleModal'));
 
-    function reloadSchedulesView() {
-        $.get(window.location.href).done(function (html) {
-            $('#adminSchedulesTableWrap').html(
-                $(html).find('#adminSchedulesTableWrap').html()
-            );
+    const table = $('#adminSchedulesTable').DataTable({
+        ajax: {
+            url: '{{ route('admin.schedules.feed') }}',
+            data: function (d) {
+                d.doctor_id = $('#filterDoctorId').val();
+                d.date = $('#filterDate').val();
+            },
+            dataSrc: 'data'
+        },
+        dom: "<'row g-3 align-items-center mb-3'<'col-md-6'l><'col-md-6'f>>" +
+             "t" +
+             "<'row g-3 align-items-center mt-2'<'col-md-6'i><'col-md-6'p>>",
+        order: [],
+        columns: [
+            { data: 'doctor_name' },
+            {
+                data: 'date',
+                render: function (data, type, row) {
+                    if (type === 'sort' || type === 'type') {
+                        return row.date_sort;
+                    }
+                    return data;
+                }
+            },
+            { data: 'time' },
+            { data: 'status' },
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                className: 'text-end',
+                render: function (_, __, row) {
+                    return `
+                        <button class="btn btn-sm btn-outline-primary admin-edit"
+                                data-id="${row.id}"
+                                data-date="${row.date}"
+                                data-start="${row.start_time}"
+                                data-end="${row.end_time}"
+                                data-status="${row.status}">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger admin-delete" data-id="${row.id}" data-date="${row.date}">Delete</button>
+                    `;
+                }
+            }
+        ]
+    });
 
-            $('#adminSchedulesPaginationWrap').html(
-                $(html).find('#adminSchedulesPaginationWrap').html()
-            );
-        }).fail(function () {
-            window.showToast('danger', 'Failed to refresh schedules table.');
-        });
-    }
+    $('#adminScheduleFilterForm').on('submit', function (e) {
+        e.preventDefault();
+        table.ajax.reload();
+    });
 
     $(document).on('click', '.admin-edit', function () {
-
         $('#editScheduleId').val($(this).data('id'));
         $('#editDate').val($(this).data('date'));
         $('#editStart').val($(this).data('start'));
         $('#editEnd').val($(this).data('end'));
         $('#editStatus').val($(this).data('status'));
-
         editModal.show();
     });
 
@@ -183,20 +255,28 @@ $(function () {
         }).done(function (res) {
             editModal.hide();
             window.showToast('success', res.message || 'Schedule updated successfully.');
-            reloadSchedulesView();
+            table.ajax.reload(null, false);
         }).fail(function (xhr) {
+            const errors = xhr.responseJSON?.errors;
+
+            if (errors) {
+                Object.values(errors).flat().forEach(function (message) {
+                    window.showToast('danger', message);
+                });
+                return;
+            }
+
             window.showToast('danger', xhr.responseJSON?.message || 'Update failed.');
         });
     });
 
     $(document).on('click', '.admin-delete', function () {
         deleteId = $(this).data('id');
-        $('#deleteScheduleDate').text($(this).closest('tr').find('td:nth-child(2)').text());
+        $('#deleteScheduleDate').text($(this).data('date'));
         deleteModal.show();
     });
 
-    $(document).on('click', '#confirmDeleteScheduleBtn', function () {
-
+    $('#confirmDeleteScheduleBtn').on('click', function () {
         if (!deleteId) return;
 
         $.ajax({
@@ -207,12 +287,11 @@ $(function () {
         }).done(function (res) {
             deleteModal.hide();
             window.showToast('success', res.message || 'Schedule deleted successfully.');
-            reloadSchedulesView();
-        }).fail(function () {
-            window.showToast('danger', 'Delete failed.');
+            table.ajax.reload(null, false);
+        }).fail(function (xhr) {
+            window.showToast('danger', xhr.responseJSON?.message || 'Delete failed.');
         });
     });
 });
 </script>
 @endpush
-

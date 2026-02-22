@@ -11,9 +11,25 @@ class AdminSpecializationController extends Controller
 {
     public function index(): View
     {
-        $specializations = Specialization::query()->orderBy('name')->get();
+        return view('admin.specializations');
+    }
 
-        return view('admin.specializations', compact('specializations'));
+    public function feed(): JsonResponse
+    {
+        $specializations = Specialization::query()
+            ->orderBy('name')
+            ->get()
+            ->map(fn (Specialization $specialization): array => [
+                'id' => $specialization->id,
+                'name' => $specialization->name,
+                'created_at' => $specialization->created_at->format('F j, Y g:i A'),
+                'created_at_sort' => $specialization->created_at->timestamp,
+            ])
+            ->values();
+
+        return response()->json([
+            'data' => $specializations,
+        ]);
     }
 
     public function store(Request $request): JsonResponse

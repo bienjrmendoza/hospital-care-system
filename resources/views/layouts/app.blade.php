@@ -21,7 +21,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/favicon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    @stack('styles')
 </head>
 <body class="bg-light">
 <header class="admin-header">
@@ -71,9 +74,44 @@
                         <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('login') }}">Login</a></li>
                         <li class="nav-item"><a class="bg-primary text-white button secondary-hover" href="{{ route('register') }}">Register <i class="fa-solid fa-arrow-right"></i></a></li>
                     @else
-                        <li class="nav-item"><span class="nav-link text-secondary">{{ auth()->user()->name }} (<span class="text-primary">{{ auth()->user()->role }}</span>)</span></li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}">@csrf<button class="bg-primary text-white button secondary-hover" type="submit">Logout <i class="fa-solid fa-arrow-right"></i></button></form>
+                        @php
+                            $parts = preg_split('/\s+/', trim(auth()->user()->name)) ?: [];
+                            $initials = collect($parts)->take(2)->map(fn ($part) => strtoupper(substr($part, 0, 1)))->implode('');
+                        @endphp
+                        <li class="nav-item user-menu">
+                            <button
+                                class="avatar-trigger"
+                                type="button"
+                                id="userMenuTrigger"
+                                aria-haspopup="menu"
+                                aria-expanded="false"
+                                aria-controls="userMenuPanel"
+                                aria-label="Open user menu"
+                            >
+                                {{ $initials !== '' ? $initials : 'U' }}
+                            </button>
+                            <div
+                                class="user-menu-panel"
+                                id="userMenuPanel"
+                                role="menu"
+                                aria-labelledby="userMenuTrigger"
+                                aria-hidden="true"
+                            >
+                                <div>
+                                    <p class="user-menu-name">
+                                        {{ auth()->user()->name }}
+                                        <span class="user-menu-role">({{ ucfirst(auth()->user()->role) }})</span>
+                                    </p>
+                                </div>
+                                <hr class="user-menu-divider">
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button class="user-menu-logout" type="submit" role="menuitem">
+                                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </div>
                         </li>
                     @endguest
                 </ul>
@@ -141,9 +179,12 @@ $(function () {
     @endif
 });
 
-document.getElementById('backBtn').addEventListener('click', function() {
-    window.history.back();
-});
+const backBtn = document.getElementById('backBtn');
+if (backBtn) {
+    backBtn.addEventListener('click', function () {
+        window.history.back();
+    });
+}
 
 @if(session('admin_email_notification'))
     toastr.info("{{ session('admin_email_notification') }}", "Admin Alert", {
@@ -153,8 +194,47 @@ document.getElementById('backBtn').addEventListener('click', function() {
         progressBar: true
     });
 @endif
+
+const userMenuTrigger = document.getElementById('userMenuTrigger');
+const userMenuPanel = document.getElementById('userMenuPanel');
+
+if (userMenuTrigger && userMenuPanel) {
+    function openUserMenu() {
+        userMenuTrigger.setAttribute('aria-expanded', 'true');
+        userMenuPanel.setAttribute('aria-hidden', 'false');
+        userMenuPanel.classList.add('is-open');
+    }
+
+    function closeUserMenu() {
+        userMenuTrigger.setAttribute('aria-expanded', 'false');
+        userMenuPanel.setAttribute('aria-hidden', 'true');
+        userMenuPanel.classList.remove('is-open');
+    }
+
+    userMenuTrigger.addEventListener('click', function () {
+        const expanded = userMenuTrigger.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+            closeUserMenu();
+        } else {
+            openUserMenu();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        const clickInside = userMenuTrigger.contains(event.target) || userMenuPanel.contains(event.target);
+        if (!clickInside) {
+            closeUserMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeUserMenu();
+            userMenuTrigger.focus();
+        }
+    });
+}
 </script>
 @stack('scripts')
 </body>
 </html>
-

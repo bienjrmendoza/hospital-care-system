@@ -17,6 +17,7 @@ Route::view('/home', 'index')->name('index');
 Route::get('/about', [ScheduleBrowserController::class, 'about'])->name('about');
 Route::get('/', [ScheduleBrowserController::class, 'index'])->name('home');
 Route::get('/schedules/feed', [ScheduleBrowserController::class, 'feed'])->name('schedules.feed');
+Route::get('/doctors/{doctor}/schedules', [ScheduleBrowserController::class, 'doctorSchedules'])->name('public.doctor.schedules');
 
 Route::view('/contact', 'contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
@@ -39,7 +40,7 @@ Route::middleware('guest')->group(function (): void {
     Route::post('/doctor/invites/{token}', [AdminInviteController::class, 'accept'])->name('doctor.invites.complete');
 });
 
-Route::middleware('auth')->group(function (): void {
+Route::middleware(['auth', 'nocache'])->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
@@ -65,17 +66,21 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/dashboard', [AdminManagementController::class, 'dashboard'])->name('admin.dashboard');
 
         Route::get('/admins', [AdminManagementController::class, 'indexAdmins'])->name('admin.admins.index');
+        Route::get('/admins/feed', [AdminManagementController::class, 'adminsFeed'])->name('admin.admins.feed');
         Route::post('/admins', [AdminManagementController::class, 'storeAdmin'])->name('admin.admins.store');
 
         Route::get('/invites', [AdminInviteController::class, 'index'])->name('admin.invites.index');
+        Route::get('/invites/feed', [AdminInviteController::class, 'feed'])->name('admin.invites.feed');
         Route::post('/invites', [AdminInviteController::class, 'store'])->name('admin.invites.store');
 
         Route::get('/specializations', [AdminSpecializationController::class, 'index'])->name('admin.specializations.index');
+        Route::get('/specializations/feed', [AdminSpecializationController::class, 'feed'])->name('admin.specializations.feed');
         Route::post('/specializations', [AdminSpecializationController::class, 'store'])->name('admin.specializations.store');
         Route::put('/specializations/{specialization}', [AdminSpecializationController::class, 'update'])->name('admin.specializations.update');
         Route::delete('/specializations/{specialization}', [AdminSpecializationController::class, 'destroy'])->name('admin.specializations.destroy');
 
         Route::get('/schedules', [AdminScheduleController::class, 'index'])->name('admin.schedules.index');
+        Route::get('/schedules/feed', [AdminScheduleController::class, 'feed'])->name('admin.schedules.feed');
         Route::put('/schedules/{schedule}', [AdminScheduleController::class, 'update'])->name('admin.schedules.update');
         Route::delete('/schedules/{schedule}', [AdminScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
     });

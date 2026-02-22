@@ -20,23 +20,17 @@ class ScheduleBrowserController extends Controller
             ->with('doctorProfile.specializationRef')
             ->orderBy('name')
             ->get();
+
         $specializations = Specialization::query()->orderBy('name')->get();
+        $date = Carbon::parse($request->query('start', now()->toDateString()));
 
-        $start = Carbon::parse($request->query('start', now()->toDateString()));
-        $end = $request->filled('end') ? Carbon::parse($request->query('end')) : null;
-
-        $schedules = $this->filteredSchedules(
-            $request,
-            $start->toDateString(),
-            $end?->toDateString()
-        );
+        $availableDoctors = $this->availableDoctors($request, $date->toDateString());
 
         return view('home', [
             'doctors' => $doctors,
             'specializations' => $specializations,
-            'start' => $start,
-            'end' => $end,
-            'schedules' => $schedules,
+            'start' => $date,
+            'availableDoctors' => $availableDoctors,
         ]);
     }
 
@@ -46,37 +40,63 @@ class ScheduleBrowserController extends Controller
             'doctor_id' => ['nullable', 'integer', 'exists:users,id'],
             'specialization_id' => ['nullable', 'integer', 'exists:specializations,id'],
             'start' => ['required', 'date'],
-            'end' => ['nullable', 'date', 'after_or_equal:start'],
         ]);
 
-        $schedules = $this->filteredSchedules($request, $data['start'], $data['end'] ?? null);
+        $availableDoctors = $this->availableDoctors($request, $data['start']);
 
         return response()->json([
-            'html' => view('partials.schedule-grid', [
-                'schedules' => $schedules,
+            'html' => view('partials.doctor-availability-cards', [
+                'availableDoctors' => $availableDoctors,
+                'date' => Carbon::parse($data['start']),
             ])->render(),
         ]);
     }
 
-    private function filteredSchedules(Request $request, string $startDate, ?string $endDate)
+    public function doctorSchedules(Request $request, User $doctor): View
     {
-        return Schedule::query()
-            ->with(['doctor.doctorProfile.specializationRef'])
-            ->whereDate('date', '>=', $startDate)
-            ->when($endDate, function (Builder $query) use ($endDate): void {
-                $query->whereDate('date', '<=', $endDate);
-            })
+        abort_unless($doctor->isDoctor(), 404);
+
+        $date = Carbon::parse($request->query('date', now()->toDateString()));
+
+        $schedules = Schedule::query()
+            ->where('doctor_id', $doctor->id)
+            ->whereDate('date', $date->toDateString())
             ->where('status', Schedule::STATUS_AVAILABLE)
+            ->orderBy('start_time')
+            ->get();
+
+        return view('doctor.public-schedules', [
+            'doctor' => $doctor->load('doctorProfile.specializationRef'),
+            'date' => $date,
+            'schedules' => $schedules,
+        ]);
+    }
+
+    private function availableDoctors(Request $request, string $date)
+    {
+        return User::query()
+            ->where('role', User::ROLE_DOCTOR)
+            ->with([
+                'doctorProfile.specializationRef',
+                'schedules' => function ($query) use ($date): void {
+                    $query->whereDate('date', $date)
+                        ->where('status', Schedule::STATUS_AVAILABLE)
+                        ->orderBy('start_time');
+                },
+            ])
+            ->whereHas('schedules', function (Builder $query) use ($date): void {
+                $query->whereDate('date', $date)
+                    ->where('status', Schedule::STATUS_AVAILABLE);
+            })
             ->when($request->filled('doctor_id'), function (Builder $query) use ($request): void {
-                $query->where('doctor_id', (int) $request->query('doctor_id'));
+                $query->where('id', (int) $request->query('doctor_id'));
             })
             ->when($request->filled('specialization_id'), function (Builder $query) use ($request): void {
-                $query->whereHas('doctor.doctorProfile', function (Builder $profileQuery) use ($request): void {
+                $query->whereHas('doctorProfile', function (Builder $profileQuery) use ($request): void {
                     $profileQuery->where('specialization_id', (int) $request->query('specialization_id'));
                 });
             })
-            ->orderBy('date')
-            ->orderBy('start_time')
+            ->orderBy('name')
             ->get();
     }
 
@@ -84,14 +104,14 @@ class ScheduleBrowserController extends Controller
     {
         return view('index');
     }
-    
+
     public function about(Request $request): View
     {
         $doctors = User::query()
             ->where('role', User::ROLE_DOCTOR)
             ->with([
                 'doctorProfile.specializationRef',
-                'schedules'
+                'schedules',
             ])
             ->orderBy('name')
             ->get();
