@@ -21,8 +21,12 @@
             <tbody>
             @forelse($requests as $request)
                 <tr>
-                    <td>{{ $request->schedule?->date?->format('Y-m-d') }}</td>
-                    <td>{{ substr($request->schedule?->start_time ?? '', 0, 5) }} - {{ substr($request->schedule?->end_time ?? '', 0, 5) }}</td>
+                    <td>{{ $request->schedule?->date?->format('F j, Y') }}</td>
+                    <td>
+                        @if($request->schedule?->start_time && $request->schedule?->end_time)
+                            {{ \Illuminate\Support\Carbon::parse($request->schedule->start_time)->format('g:i A') }} - {{ \Illuminate\Support\Carbon::parse($request->schedule->end_time)->format('g:i A') }}
+                        @endif
+                    </td>
                     <td>{{ $request->schedule?->doctor?->name }}</td>
                     <td>
                         @if($request->status === 'pending')

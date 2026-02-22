@@ -52,7 +52,7 @@
                 <tr>
                     <td>{{ $schedule->date->format('F j, Y') }}</td>
                     <td>{{ \Illuminate\Support\Carbon::parse($schedule->start_time)->format('g:i A') }} - {{ \Illuminate\Support\Carbon::parse($schedule->end_time)->format('g:i A') }}</td>
-                    <td><span class="badge text-bg-secondary">{{ $schedule->status }}</span></td>
+                    <td><span class="badge text-bg-secondary">{{ ucfirst($schedule->status) }}</span></td>
                     <td class="text-end">
                         <button class="btn btn-sm btn-outline-primary edit-schedule"
                                 data-id="{{ $schedule->id }}"
@@ -60,7 +60,10 @@
                                 data-start="{{ substr($schedule->start_time, 0, 5) }}"
                                 data-end="{{ substr($schedule->end_time, 0, 5) }}"
                                 data-status="{{ $schedule->status }}">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger delete-schedule" data-id="{{ $schedule->id }}">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger delete-schedule"
+                                data-id="{{ $schedule->id }}"
+                                data-summary="{{ $schedule->date->format('F j, Y') }} | {{ \Illuminate\Support\Carbon::parse($schedule->start_time)->format('g:i A') }} - {{ \Illuminate\Support\Carbon::parse($schedule->end_time)->format('g:i A') }}"
+                        >Delete</button>
                     </td>
                 </tr>
             @empty
@@ -70,6 +73,68 @@
         </table>
     </div>
 </div>
+
+<div class="modal fade" id="editScheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editScheduleForm">
+                <div class="modal-header">
+                    <h5 class="modal-title text-secondary">Edit Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editScheduleId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" id="editDate" class="form-control shadow-none" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Start Time</label>
+                            <input type="time" id="editStart" class="form-control shadow-none" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">End Time</label>
+                            <input type="time" id="editEnd" class="form-control shadow-none" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="editStatus" class="form-select shadow-none" required>
+                            <option value="available">Available</option>
+                            <option value="booked">Booked</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn bg-primary text-white secondary-hover">Update Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteScheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-secondary">Delete Schedule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Are you sure you want to delete <strong id="deleteScheduleSummary"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteScheduleBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -77,6 +142,11 @@
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
     let slotIndex = 1;
+    let deleteScheduleId = null;
+    const editModalEl = document.getElementById('editScheduleModal');
+    const deleteModalEl = document.getElementById('deleteScheduleModal');
+    const editModal = editModalEl ? new bootstrap.Modal(editModalEl) : null;
+    const deleteModal = deleteModalEl ? new bootstrap.Modal(deleteModalEl) : null;
 
     function reloadSchedulesTable() {
         $.get(window.location.href).done(function (html) {
@@ -122,13 +192,27 @@ $(function () {
     });
 
     $(document).on('click', '.edit-schedule', function () {
-        const id = $(this).data('id');
-        const date = prompt('Date (YYYY-MM-DD)', $(this).data('date'));
-        const start = prompt('Start (HH:MM)', $(this).data('start'));
-        const end = prompt('End (HH:MM)', $(this).data('end'));
-        const status = prompt('Status (available/booked)', $(this).data('status'));
+        $('#editScheduleId').val($(this).data('id'));
+        $('#editDate').val($(this).data('date'));
+        $('#editStart').val($(this).data('start'));
+        $('#editEnd').val($(this).data('end'));
+        $('#editStatus').val($(this).data('status'));
+        editModal?.show();
+    });
 
-        if (!date || !start || !end || !status) return;
+    $('#editScheduleForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const id = $('#editScheduleId').val();
+        const date = $('#editDate').val();
+        const start = $('#editStart').val();
+        const end = $('#editEnd').val();
+        const status = $('#editStatus').val();
+
+        if (start >= end) {
+            window.showToast('danger', 'End time must be after start time.');
+            return;
+        }
 
         $.ajax({
             url: `/doctor/schedules/${id}`,
@@ -137,6 +221,7 @@ $(function () {
             data: { _method: 'PUT', date: date, start_time: start, end_time: end, status: status }
         }).done(function (res) {
             window.showToast('success', res.message);
+            editModal?.hide();
             reloadSchedulesTable();
         }).fail(function (xhr) {
             window.showToast('danger', xhr.responseJSON?.message || 'Update failed.');
@@ -144,16 +229,23 @@ $(function () {
     });
 
     $(document).on('click', '.delete-schedule', function () {
-        if (!confirm('Delete this schedule?')) return;
-        const id = $(this).data('id');
+        deleteScheduleId = $(this).data('id');
+        $('#deleteScheduleSummary').text($(this).data('summary'));
+        deleteModal?.show();
+    });
+
+    $('#confirmDeleteScheduleBtn').on('click', function () {
+        if (!deleteScheduleId) return;
 
         $.ajax({
-            url: `/doctor/schedules/${id}`,
+            url: `/doctor/schedules/${deleteScheduleId}`,
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { _method: 'DELETE' }
         }).done(function (res) {
             window.showToast('success', res.message);
+            deleteModal?.hide();
+            deleteScheduleId = null;
             reloadSchedulesTable();
         }).fail(function (xhr) {
             window.showToast('danger', xhr.responseJSON?.message || 'Delete failed.');
