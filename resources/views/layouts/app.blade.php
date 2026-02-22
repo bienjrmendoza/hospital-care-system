@@ -37,7 +37,7 @@
 <header class="admin-header">
     <nav class="navbar navbar-expand-lg bg-white">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
+            <a class="navbar-brand" href="/">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNav">
@@ -72,7 +72,7 @@
                     @endauth
                     @guest
                         <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('login') }}">Login</a></li>
-                        <li class="nav-item"><a class="bg-primary text-white button secondary-hover" href="{{ route('register') }}">Register <i class="fa-solid fa-arrow-right"></i></a></li>
+                        <li class="nav-item"><button class="bg-primary text-white button secondary-hover"><a class="text-white" href="{{ route('register') }}">Register <i class="fa-solid fa-arrow-right"></i></a></button></li>
                     @else
                         @php
                             $parts = preg_split('/\s+/', trim(auth()->user()->name)) ?: [];
@@ -80,7 +80,7 @@
                         @endphp
                         <li class="nav-item user-menu">
                             <button
-                                class="avatar-trigger"
+                                class="avatar-trigger bg-primary text-white p-3"
                                 type="button"
                                 id="userMenuTrigger"
                                 aria-haspopup="menu"
@@ -100,7 +100,7 @@
                                 <div>
                                     <p class="user-menu-name">
                                         {{ auth()->user()->name }}
-                                        <span class="user-menu-role">({{ ucfirst(auth()->user()->role) }})</span>
+                                        <span class="user-menu-role text-primary"><strong>({{ ucfirst(auth()->user()->role) }})</strong></span>
                                     </p>
                                 </div>
                                 <hr class="user-menu-divider">
