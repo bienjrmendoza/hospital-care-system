@@ -14,7 +14,7 @@
                     <div class="mt-auto">
                         <a
                             href="{{ route('public.doctor.schedules', ['doctor' => $doctor->id, 'date' => $date->toDateString()]) }}"
-                            class="btn btn-primary w-100"
+                            class="btn btn-primary w-100 secondary-hover"
                         >
                             View <i class="fa-solid fa-right-to-bracket ms-1" aria-hidden="true"></i>
                         </a>

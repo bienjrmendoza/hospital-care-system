@@ -30,10 +30,10 @@
                     <label class="form-label">Password</label>
                     <input type="password" name="password" class="form-control shadow-none" required>
                 </div>
-                <div class="form-check mb-3">
+                <!-- <div class="form-check mb-3">
                     <input type="checkbox" class="form-check-input shadow-none" id="remember" name="remember" value="1">
                     <label class="form-check-label" for="remember">Remember me</label>
-                </div>
+                </div> -->
                 <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Sign in <i class="fa-solid fa-arrow-right"></i></button>
             </form>
         </div>

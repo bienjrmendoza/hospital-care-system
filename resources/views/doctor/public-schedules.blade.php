@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="back-btn admin-btn mb-3">
-    <button class="bg-primary text-white secondary-hover text-center px-5" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <button class="back-btn" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
 </div>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">

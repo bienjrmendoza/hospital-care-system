@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/home">
+            <a class="navbar-brand" href="/">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="Logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
@@ -10,18 +10,21 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainMenu">
                 <ul class="navbar-nav align-items-lg-center menu-links">
                     <li class="nav-item text-secondary">
-                        <a href="/home">HOME</a>
+                        <a href="/">HOME</a>
                     </li>
                     <li class="nav-item text-secondary">
                         <a href="/about">ABOUT & DOCTORS</a>
                     </li>
-                    <li class="nav-item text-secondary">
-                        <a href="/login">ONLINE CONSULTATION LOGIN</a>
-                    </li>
+                    @guest
+                        <li class="nav-item text-secondary">
+                            <a href="/login">ONLINE CONSULTATION LOGIN</a>
+                        </li>
+                    @else
+                    @endguest
                     <li class="nav-item">
-                        <button class="bg-primary text-white button secondary-hover">
-                            <a href="/">BOOK APPOINTMENT <i class="fa-solid fa-arrow-right"></i></a>
-                        </button>
+                        <!-- <button class="bg-primary text-white button secondary-hover"> -->
+                            <a class="bg-primary text-white button secondary-hover" href="/schedules">BOOK APPOINTMENT <i class="fa-solid fa-arrow-right"></i></a>
+                        <!-- </button> -->
                     </li>
                 </ul>
             </div>
