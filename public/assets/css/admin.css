@@ -141,6 +141,7 @@
 a {
     color: inherit;
     text-decoration: auto;
+    text-transform: uppercase;
     font-weight: 500;
 }
 
@@ -238,6 +239,14 @@ header img {
     padding: 0 !important;
     text-align: left;
     color: var(--primary);
+}
+
+#toggleIcon1, 
+#toggleIcon2 {
+    position: absolute;
+    top: 62%;
+    right: 15px;
+    bottom: 50%;
 }
 /* DASHBOARD */
 /* DASHBOARD */
@@ -374,7 +383,11 @@ td button {
     }
 
     header {
-        padding: 10px 5px;
+        padding: 10px 5px!important;
+    }
+
+    header ul {
+        margin-top: 10px;
     }
 
     header .navbar-toggler {
@@ -391,10 +404,6 @@ td button {
 
     footer div.col-lg-6 p {
         text-align: left !important;
-    }
-
-    header img {
-        max-width: 200px;
     }
 
     .admin .admin-btn td .share-invite-btn {
@@ -418,7 +427,7 @@ td button {
     }
     
     header img {
-        max-width: 215px!important;
+        max-width: 240px!important;
     }
 
     .menu-links {

@@ -14,7 +14,7 @@
             <li>System is for non-emergency outpatient consultations only.</li>
             <li>Limit of 500 consultation requests per day.</li>
         </ul>
-        <p>Reminder: Please be sure to bring your PhilHealth ID and Member Data Record (MDR) for identification during your visit.</p>
+        <p>Reminder: Kindly make sure to bring your PhilHealth ID and Member Data Record (MDR) for identification during your visit.</p>
     </div>
     <div class="col-md-6">
         <div class="contact-form card">
@@ -30,13 +30,15 @@
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control shadow-none" value="{{ old('email') }}" required>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 position-relative">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control shadow-none" required>
+                    <input type="password" id="password" name="password" class="form-control shadow-none" required>
+                    <span onclick="togglePassword('password', 'toggleIcon1')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon1"></i></span>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 position-relative">
                     <label class="form-label">Confirm Password</label>
-                    <input type="password" name="password_confirmation" class="form-control shadow-none" required>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control shadow-none" required>
+                    <span onclick="togglePassword('password_confirmation', 'toggleIcon2')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon2"></i></span>
                 </div>
                 <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Create account <i class="fa-solid fa-arrow-right"></i></button>
             </form>

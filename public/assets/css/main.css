@@ -3,8 +3,8 @@
 }
 
 .avatar-trigger {
-    width: 42px;
-    height: 42px;
+    /* width: 55px; */
+    height: 50px;
     border-radius: 999px;
     border: 1px solid #e6e8ee;
     background: #fff;
@@ -12,7 +12,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px !important;
+    font-size: 16px;
     font-weight: 600 !important;
     box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
     transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
@@ -98,4 +98,10 @@
     background: #fef2f2 !important;
     color: #b91c1c;
     outline: none;
+}
+
+@media screen and (max-width: 992px){
+    .user-menu-panel {
+        width: 100%;
+    }    
 }

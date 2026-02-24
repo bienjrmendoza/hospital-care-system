@@ -43,7 +43,7 @@
                                 <p class="text-tertiary mb-0 description">The Health Care Philosophy</p>
                                 <h1 class="text-white">We Provide Best Medical Service</h1>
                                 <p class="text-white description">At outpatient care center, our mission is to provide comprehensive and compassionate medical support. We combine advanced digital health technology with professional excellence to ensure every outpatient consultation is delivered with the highest standards of trust, quality, and care.</p>
-                                <button class="bg-primary text-white button secondary-hover"><a href="/">Free Consultation <i class="fa-solid fa-arrow-right"></i></a></button>
+                                <a href="/schedules"><button class="bg-primary text-white button secondary-hover">Free Consultation <i class="fa-solid fa-arrow-right"></i></button></a>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                                     <h5 class="text-secondary">Appointment Hotline</h5>
                                     <p><i class="fa-solid fa-phone text-secondary"></i> Emergency: <a href="tel:09914946036">09914946036</a></p>
                                     <h5 class="text-secondary">Medical Records Inquiry</h5>
-                                    <p><i class="fa-solid fa-envelope text-secondary"></i><a href="mailto:care@outpatientcare.com"> care@outpatientcare.com</a></p>
+                                    <p><i class="fa-solid fa-envelope text-secondary"></i><a href="mailto:tabhcare@gmail.com"> tabhcare@gmail.com</a></p>
                                     <h5 class="text-secondary">Outpatient Clinic Address</h5>
                                     <p><i class="fa-solid fa-location-dot text-secondary"></i> Maharlika Highway, Brgy. Ibabang Dupay, Lucena City, Philippines, 4301</p>
                                 </div>
