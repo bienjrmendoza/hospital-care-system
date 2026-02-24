@@ -22,9 +22,11 @@
                     @else
                     @endguest
                     <li class="nav-item">
-                        <!-- <button class="bg-primary text-white button secondary-hover"> -->
-                            <a class="bg-primary text-white button secondary-hover" href="/schedules">BOOK APPOINTMENT <i class="fa-solid fa-arrow-right"></i></a>
-                        <!-- </button> -->
+                        <a href="/schedules">
+                            <button class="bg-primary text-white button secondary-hover">
+                                BOOK APPOINTMENT <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </a>
                     </li>
                 </ul>
             </div>

@@ -304,6 +304,10 @@ footer img {
         padding: 10px 5px;
     }
 
+    header ul {
+        margin-top: 10px;
+    }
+
     header .navbar-toggler {
         width: auto;
     }
@@ -319,10 +323,6 @@ footer img {
     footer div.col-lg-6 p {
         text-align: left !important;
     }
-
-    header img {
-        max-width: 200px;
-    }
 }
 
 @media screen and (max-width: 1400px) {
@@ -332,7 +332,7 @@ footer img {
     }
     
     header img {
-        max-width: 215px!important;
+        max-width: 240px!important;
     }
 
     .menu-links {

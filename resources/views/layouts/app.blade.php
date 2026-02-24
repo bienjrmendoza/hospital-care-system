@@ -72,7 +72,7 @@
                     @endauth
                     @guest
                         <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('login') }}">Login</a></li>
-                        <li class="nav-item"><button class="bg-primary text-white button secondary-hover"><a class="text-white" href="{{ route('register') }}">Register <i class="fa-solid fa-arrow-right"></i></a></button></li>
+                        <li class="nav-item"><a class="text-white" href="{{ route('register') }}"><button class="bg-primary text-white button secondary-hover">Register <i class="fa-solid fa-arrow-right"></i></button></a></li>
                     @else
                         @php
                             $parts = preg_split('/\s+/', trim(auth()->user()->name)) ?: [];
@@ -80,7 +80,7 @@
                         @endphp
                         <li class="nav-item user-menu">
                             <button
-                                class="avatar-trigger bg-primary text-white p-3"
+                                class="avatar-trigger bg-primary text-white p-3 w-100"
                                 type="button"
                                 id="userMenuTrigger"
                                 aria-haspopup="menu"
@@ -88,7 +88,11 @@
                                 aria-controls="userMenuPanel"
                                 aria-label="Open user menu"
                             >
-                                {{ $initials !== '' ? $initials : 'U' }}
+                                <!-- {{ $initials !== '' ? $initials : 'U' }} -->
+                                <!-- PAGMALAKI SCREEN -->
+                                <span class="d-none d-lg-inline text-white">{{ $initials !== '' ? $initials : 'U' }}</span>
+                                <!-- PAGMALIIT SCREEN -->
+                                <span class="d-inline d-lg-none text-white">{{ auth()->user()->name }}</span>
                             </button>
                             <div
                                 class="user-menu-panel"
@@ -233,6 +237,21 @@ if (userMenuTrigger && userMenuPanel) {
             userMenuTrigger.focus();
         }
     });
+}
+
+function togglePassword(inputId, iconId) {
+    const password = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+
+    if (password.type === "password") {
+        password.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        password.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
 }
 </script>
 @stack('scripts')
