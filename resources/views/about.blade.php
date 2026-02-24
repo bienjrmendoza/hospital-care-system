@@ -43,7 +43,7 @@
                                 <p class="text-tertiary mb-0 description">The Health Care Philosophy</p>
                                 <h1 class="text-white">We Provide Best Medical Service</h1>
                                 <p class="text-white description">At outpatient care center, our mission is to provide comprehensive and compassionate medical support. We combine advanced digital health technology with professional excellence to ensure every outpatient consultation is delivered with the highest standards of trust, quality, and care.</p>
-                                <button class="bg-primary text-white button secondary-hover"><a href="/">Free Consultation <i class="fa-solid fa-arrow-right"></i></a></button>
+                                <a href="/schedules"><button class="bg-primary text-white button secondary-hover">Free Consultation <i class="fa-solid fa-arrow-right"></i></button></a>
                             </div>
                         </div>
                     </div>
