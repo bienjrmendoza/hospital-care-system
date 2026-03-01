@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <h2 class="text-secondary">Announcements</h2>
-        <p>Thank you for choosing Outpatient Care Center. Please fill out the detailed inquiry form below. Our dedicated medical team will review your information and reach out shortly to coordinate your consultation.</p>
+        <p>Thank you for choosing TABH Care. Please fill out the detailed inquiry form below. Our dedicated medical team will review your information and reach out shortly to coordinate your consultation.</p>
         <ul>
             <li>Consultation scheduling available Monday–Friday, 6AM–6PM (except holidays).</li>
             <li>No walk-in appointments allowed — registration must be done online.</li>

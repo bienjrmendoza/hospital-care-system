@@ -23,8 +23,9 @@ class ContactController extends Controller
         $data['phone'] = preg_replace('/[^0-9+]/', '', $data['phone']);
 
         try {
-            Mail::to('johnhowellatienza@gmail.com')->send(new ContactAdminMail($data));
-            Mail::to($data['email'])->send(new ContactUserMail($data));
+            // Mail::to('johnhowellatienza@gmail.com')->send((new ContactAdminMail($data))->from('team@tabhcare.online', 'Tabh Care'));
+            Mail::to('team@tabhcare.online')->send((new ContactAdminMail($data))->from('team@tabhcare.online', 'Tabh Care'));
+            Mail::to($data['email'])->send((new ContactUserMail($data))->from('team@tabhcare.online', 'Tabh Care'));
 
             return redirect()->back()
                 ->with('success', 'Message sent successfully!')
