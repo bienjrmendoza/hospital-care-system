@@ -187,7 +187,9 @@ $(function () {
             window.showToast('success', res.message);
             reloadSchedulesTable();
         }).fail(function (xhr) {
-            window.showToast('danger', xhr.responseJSON?.message || 'Failed to save schedules.');
+            const message = xhr.responseJSON?.message || 'Failed to save schedules.';
+            const type = message === 'You can only add a schedule 2 weeks into the future.' ? 'info' : 'danger';
+            window.showToast(type, message);
         });
     });
 

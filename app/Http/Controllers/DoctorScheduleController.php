@@ -37,6 +37,8 @@ class DoctorScheduleController extends Controller
             'slots' => ['required', 'array', 'min:1'],
             'slots.*.start_time' => ['required', 'date_format:H:i'],
             'slots.*.end_time' => ['required', 'date_format:H:i'],
+        ], [
+            'date.before_or_equal' => 'You can only add a schedule 2 weeks into the future.',
         ]);
 
         foreach ($data['slots'] as $slot) {
