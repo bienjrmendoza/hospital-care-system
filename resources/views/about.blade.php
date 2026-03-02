@@ -42,7 +42,7 @@
                             <div class="col-lg-12 text-center">
                                 <p class="text-tertiary mb-0 description">The Health Care Philosophy</p>
                                 <h1 class="text-white">We Provide Best Medical Service</h1>
-                                <p class="text-white description">At outpatient care center, our mission is to provide comprehensive and compassionate medical support. We combine advanced digital health technology with professional excellence to ensure every outpatient consultation is delivered with the highest standards of trust, quality, and care.</p>
+                                <p class="text-white description">At TABH Care, our mission is to provide comprehensive and compassionate medical support. We combine advanced digital health technology with professional excellence to ensure every outpatient consultation is delivered with the highest standards of trust, quality, and care.</p>
                                 <a href="/schedules"><button class="bg-primary text-white button secondary-hover">Free Consultation <i class="fa-solid fa-arrow-right"></i></button></a>
                             </div>
                         </div>
@@ -58,9 +58,19 @@
                                     @foreach($doctors as $doctor)
                                         <div class="swiper-slide">
                                             <div class="card text-center p-4">
-                                                <div class="profile mb-3">
-                                                    <i class="fa-solid fa-user-doctor text-primary fa-3x"></i>
-                                                </div>
+                                                @if($doctor->profile_image)
+                                                    <div style="background-image: url({{ asset('storage/' . $doctor->profile_image) }});background-position: top center; background-size: cover;" class="profile mb-3">
+                                                        <!-- @if($doctor->profile_image)
+                                                            <img src="{{ asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle doctors-img" width="80">
+                                                        @else
+                                                            <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+                                                        @endif -->
+                                                    </div>
+                                                @else
+                                                    <div class="profile mb-3">
+                                                        <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+                                                    </div>
+                                                @endif
                                                 <h4 class="text-secondary">
                                                     {{ $doctor->name }}
                                                 </h4>
@@ -84,13 +94,13 @@
                         <div class="row">
                             <div class="col-lg-5">
                                 <h2 class="text-secondary">Inpatient & Consultation Inquiry</h2>
-                                <p>Thank you for choosing Outpatient Care Center. Please fill out the detailed inquiry form below. Our dedicated medical team will review your information and reach out shortly to coordinate your consultation.</p>
+                                <p>Thank you for choosing TABH Care. Please fill out the detailed inquiry form below. Our dedicated medical team will review your information and reach out shortly to coordinate your consultation.</p>
                                 <div class="contact">
                                     <h5 class="text-secondary">Appointment Hotline</h5>
                                     <p><i class="fa-solid fa-phone text-secondary"></i> Emergency: <a href="tel:09914946036">09914946036</a></p>
                                     <h5 class="text-secondary">Medical Records Inquiry</h5>
-                                    <p><i class="fa-solid fa-envelope text-secondary"></i><a href="mailto:tabhcare@gmail.com"> tabhcare@gmail.com</a></p>
-                                    <h5 class="text-secondary">Outpatient Clinic Address</h5>
+                                    <p><i class="fa-solid fa-envelope text-secondary"></i><a href="mailto:team@tabhcare.online"> team@tabhcare.online</a></p>
+                                    <h5 class="text-secondary">TABH Care Clinic Address</h5>
                                     <p><i class="fa-solid fa-location-dot text-secondary"></i> Maharlika Highway, Brgy. Ibabang Dupay, Lucena City, Philippines, 4301</p>
                                 </div>
                             </div>
@@ -154,19 +164,19 @@
         loop: true,
         slidesPerView: 'auto',
         spaceBetween: 30,
-        speed: 8000,
+        // speed: 10000,
         allowTouchMove: true,
         grabCursor: true,
 
-        autoplay: {
-            delay: 0,
-            disableOnInteraction: false,
-        },
+        // autoplay: {
+        //     delay: 0,
+        //     disableOnInteraction: false,
+        // },
 
         breakpoints: {
             0: { slidesPerView: 1 },
             768: { slidesPerView: 2 },
-            992: { slidesPerView: 3 }
+            992: { slidesPerView: 3 },
         }
     });
     

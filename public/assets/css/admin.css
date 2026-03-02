@@ -331,6 +331,20 @@ td button {
 .modal-content button {
     padding: 10px 20px;
 }
+
+.container-profile img {
+    height: 95px;
+    width: 95px;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.container-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
 /* MOBILE START */
 @media screen and (max-width: 1024px) {
     h1, h2, h3, h4, h5, p, span {

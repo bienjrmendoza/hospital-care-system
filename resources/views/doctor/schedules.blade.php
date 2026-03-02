@@ -164,7 +164,7 @@ $(function () {
             <div class="row g-2 slot-row">
                 <div class="col-md-5"><input type="time" class="form-control shadow-none" name="slots[${slotIndex}][start_time]" required></div>
                 <div class="col-md-5"><input type="time" class="form-control shadow-none" name="slots[${slotIndex}][end_time]" required></div>
-                <div class="col-md-2"><button class="btn btn-outline-danger w-100 remove-slot" type="button">Remove</button></div>
+                <div class="col-md-2"><button class="btn btn-outline-danger w-100 remove-slot" type="button"><i class="fa-solid fa-trash"></i> Remove</button></div>
             </div>
         `);
         slotIndex++;
