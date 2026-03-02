@@ -6,12 +6,23 @@
 </div>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
-    <div>
-        <h3 class="text-secondary mb-1">{{ $doctor->name }}</h3>
-        <p class="text-muted mb-0">{{ $doctor->doctorProfile?->specializationRef?->name ?? 'General' }}</p>
+    <div class="container-profile">
+        <div>
+            @if($doctor->profile_image)
+                <img src="{{ Str::startsWith($doctor->profile_image, 'http') ? $doctor->profile_image : asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle" />
+            @else
+                <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+            @endif
+        </div>
+        <div>
+            <h3 class="text-secondary mb-1">{{ $doctor->name }}</h3>
+            <p class="text-muted mb-0">{{ $doctor->doctorProfile?->specializationRef?->name ?? 'General' }}</p>
+            <!-- <p class="mb-0">
+                <span class="badge text-bg-light border">{{ $doctor->schedules->count() }} slot(s) available</span>
+            </p> -->
+        </div>
     </div>
 </div>
-
 <div class="card shadow-sm mb-3">
     <div class="card-body admin-btn">
         <form method="GET" action="{{ route('public.doctor.schedules', $doctor->id) }}" class="row g-2">

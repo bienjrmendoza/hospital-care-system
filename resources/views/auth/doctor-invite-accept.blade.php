@@ -6,11 +6,16 @@
         <div class="contact-form card">
             <h4 class="text-secondary mb-3">Doctor Invitation</h4>
             <p>Invitation for <strong class="text-primary">{{ $invite->email }}</strong>. Set your account password to continue.</p>
-            <form method="POST" action="{{ route('doctor.invites.complete', $invite->token) }}" id="submit-disable">
+            <form method="POST" action="{{ route('doctor.invites.complete', $invite->token) }}" id="submit-disable" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Specialization</label>
                     <input class="form-control shadow-none" value="{{ $invite->specializationRef?->name }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Profile Image</label>
+                    <input type="file" name="profile_image" class="form-control shadow-none" accept="image/*">
+                    <small class="text-muted">Optional. JPG, PNG, AVIF, WEBP JPEG max 2MB.</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Name</label>

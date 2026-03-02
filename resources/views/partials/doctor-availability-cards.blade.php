@@ -3,14 +3,24 @@
         <div class="col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="mb-1 text-secondary">{{ $doctor->name }}</h5>
-                    <p class="text-muted mb-2">
-                        {{ $doctor->doctorProfile?->specializationRef?->name ?? 'General' }}
-                    </p>
-                    <p class="mb-3">
-                        <span class="badge text-bg-light border">{{ $doctor->schedules->count() }} slot(s) available</span>
-                    </p>
-
+                    <div class="container-profile">
+                        <div>
+                            @if($doctor->profile_image)
+                                <img src="{{ Str::startsWith($doctor->profile_image, 'http') ? $doctor->profile_image : asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle" />
+                            @else
+                                <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+                            @endif
+                        </div>
+                        <div>
+                            <h5 class="mb-1 text-secondary">{{ $doctor->name }}</h5>
+                            <p class="text-muted mb-2">
+                                {{ $doctor->doctorProfile?->specializationRef?->name ?? 'General' }}
+                            </p>
+                            <p class="mb-0">
+                                <span class="badge text-bg-light border">{{ $doctor->schedules->count() }} slot(s) available</span>
+                            </p>
+                        </div>
+                    </div>
                     <div class="mt-auto">
                         <a
                             href="{{ route('public.doctor.schedules', ['doctor' => $doctor->id, 'date' => $date->toDateString()]) }}"

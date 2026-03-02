@@ -95,7 +95,7 @@
 
 .profile {
     align-content: center;
-    height: 200px;
+    height: 300px;
     text-align: center;
     background-color: #e1f0ff;
     border-radius: 15px 15px 0 0;
@@ -114,6 +114,12 @@
 
 .swiper-wrapper {
     transition-timing-function: linear !important;
+}
+
+.doctors-img {
+    height: 200px;
+    width: auto;
+    object-fit: cover;
 }
 
 /* .doctorSwiper {

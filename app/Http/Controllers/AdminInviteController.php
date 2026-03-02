@@ -107,14 +107,21 @@ class AdminInviteController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,avif,webp', 'max:2048'],
         ]);
 
-        DB::transaction(function () use ($invite, $data): void {
+        $profileImagePath = null;
+        if ($request->hasFile('profile_image')) {
+            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+        }
+
+        DB::transaction(function () use ($invite, $data, $profileImagePath): void {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $invite->email,
                 'password' => $data['password'],
                 'role' => User::ROLE_DOCTOR,
+                'profile_image' => $profileImagePath,
             ]);
 
             DoctorProfile::create([

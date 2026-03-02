@@ -58,9 +58,19 @@
                                     @foreach($doctors as $doctor)
                                         <div class="swiper-slide">
                                             <div class="card text-center p-4">
-                                                <div class="profile mb-3">
-                                                    <i class="fa-solid fa-user-doctor text-primary fa-3x"></i>
-                                                </div>
+                                                @if($doctor->profile_image)
+                                                    <div style="background-image: url({{ asset('storage/' . $doctor->profile_image) }});background-position: top center; background-size: cover;" class="profile mb-3">
+                                                        <!-- @if($doctor->profile_image)
+                                                            <img src="{{ asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle doctors-img" width="80">
+                                                        @else
+                                                            <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+                                                        @endif -->
+                                                    </div>
+                                                @else
+                                                    <div class="profile mb-3">
+                                                        <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
+                                                    </div>
+                                                @endif
                                                 <h4 class="text-secondary">
                                                     {{ $doctor->name }}
                                                 </h4>
@@ -154,19 +164,19 @@
         loop: true,
         slidesPerView: 'auto',
         spaceBetween: 30,
-        speed: 8000,
+        // speed: 10000,
         allowTouchMove: true,
         grabCursor: true,
 
-        autoplay: {
-            delay: 0,
-            disableOnInteraction: false,
-        },
+        // autoplay: {
+        //     delay: 0,
+        //     disableOnInteraction: false,
+        // },
 
         breakpoints: {
             0: { slidesPerView: 1 },
             768: { slidesPerView: 2 },
-            992: { slidesPerView: 3 }
+            992: { slidesPerView: 3 },
         }
     });
     
