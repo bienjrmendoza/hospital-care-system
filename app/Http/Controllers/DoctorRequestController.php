@@ -7,13 +7,15 @@ use App\Models\ScheduleRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Mail\ScheduleRequestResponded;
+use Illuminate\Support\Facades\Mail;
 
 class DoctorRequestController extends Controller
 {
     public function index(): View
     {
         $requests = ScheduleRequest::query()
-            ->with(['user', 'schedule'])
+            ->with(['user', 'schedule.doctor'])
             ->whereHas('schedule', fn ($query) => $query->where('doctor_id', auth()->id()))
             ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
             ->latest()
@@ -24,7 +26,7 @@ class DoctorRequestController extends Controller
 
     public function accept(ScheduleRequest $scheduleRequest): JsonResponse
     {
-        $scheduleRequest->load('schedule');
+        $scheduleRequest->load('schedule.doctor', 'user');
         $this->authorize('update', $scheduleRequest);
 
         $result = DB::transaction(function () use ($scheduleRequest) {
@@ -44,16 +46,29 @@ class DoctorRequestController extends Controller
                 'responded_at' => now(),
             ]);
 
+            if ($locked->user && $locked->user->email) {
+                Mail::to($locked->user->email)
+                    ->queue(new ScheduleRequestResponded($locked));
+            }
+
             $schedule->update(['status' => Schedule::STATUS_BOOKED]);
 
             ScheduleRequest::query()
                 ->where('schedule_id', $schedule->id)
                 ->where('id', '!=', $locked->id)
                 ->where('status', ScheduleRequest::STATUS_PENDING)
-                ->update([
-                    'status' => ScheduleRequest::STATUS_DECLINED,
-                    'responded_at' => now(),
-                ]);
+                ->get()
+                ->each(function ($request) {
+                    $request->update([
+                        'status' => ScheduleRequest::STATUS_DECLINED,
+                        'responded_at' => now(),
+                    ]);
+
+                    if ($request->user && $request->user->email) {
+                        Mail::to($request->user->email)
+                            ->queue(new ScheduleRequestResponded($request));
+                    }
+                });
 
             return ['ok' => true, 'message' => 'Request accepted.'];
         });
@@ -65,7 +80,7 @@ class DoctorRequestController extends Controller
 
     public function decline(ScheduleRequest $scheduleRequest): JsonResponse
     {
-        $scheduleRequest->load('schedule');
+        $scheduleRequest->load('schedule.doctor', 'user');
         $this->authorize('update', $scheduleRequest);
 
         if ($scheduleRequest->status !== ScheduleRequest::STATUS_PENDING) {
@@ -76,6 +91,11 @@ class DoctorRequestController extends Controller
             'status' => ScheduleRequest::STATUS_DECLINED,
             'responded_at' => now(),
         ]);
+
+        if ($scheduleRequest->user && $scheduleRequest->user->email) {
+            Mail::to($scheduleRequest->user->email)
+                ->queue(new ScheduleRequestResponded($scheduleRequest));
+        }
 
         return response()->json(['message' => 'Request declined.']);
     }
