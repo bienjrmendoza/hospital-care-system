@@ -164,14 +164,14 @@
         loop: true,
         slidesPerView: 'auto',
         spaceBetween: 30,
-        // speed: 10000,
+        speed: 8000,
         allowTouchMove: true,
         grabCursor: true,
 
-        // autoplay: {
-        //     delay: 0,
-        //     disableOnInteraction: false,
-        // },
+        autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+        },
 
         breakpoints: {
             0: { slidesPerView: 1 },

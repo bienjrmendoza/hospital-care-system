@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Mail\ScheduleRequestSubmitted;
+use Illuminate\Support\Facades\Mail;
 
 class UserRequestController extends Controller
 {
@@ -49,12 +51,18 @@ class UserRequestController extends Controller
                 return ['ok' => false, 'message' => 'You already have an active request for this slot.'];
             }
 
-            ScheduleRequest::create([
+            $scheduleRequest = ScheduleRequest::create([
                 'schedule_id' => $schedule->id,
                 'user_id' => auth()->id(),
                 'status' => ScheduleRequest::STATUS_PENDING,
                 'notes' => $data['notes'] ?? null,
             ]);
+
+            $doctor = $schedule->doctor;
+            if ($doctor && $doctor->email) {
+                Mail::to($doctor->email)
+                    ->queue(new ScheduleRequestSubmitted($scheduleRequest));
+            }
 
             return ['ok' => true, 'message' => 'Schedule request submitted.'];
         });
@@ -77,6 +85,13 @@ class UserRequestController extends Controller
             'responded_at' => now(),
         ]);
 
-        return back()->with('success', 'Request cancelled.');
+        $doctor = $scheduleRequest->schedule->doctor;
+
+        if ($doctor && $doctor->email) {
+            Mail::to($doctor->email)
+                ->queue(new ScheduleRequestSubmitted($scheduleRequest));
+        }
+
+        return back()->with('success', 'Request cancelled and email notification sent.');
     }
 }
