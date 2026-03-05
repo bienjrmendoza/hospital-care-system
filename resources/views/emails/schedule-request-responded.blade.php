@@ -11,7 +11,12 @@
     </div>
 
     <div style="padding:20px; text-align:left;">
-        <h2 style="color:#155edb; font-size:24px; margin:0;">Your Schedule Request has been {{ ucfirst($scheduleRequest->status) }}</h2>
+        
+        @if($scheduleRequest->status === 'declined')
+            <h2 style="color:#d9534f; font-size:24px; margin:0;">Your Schedule Request has been {{ ucfirst($scheduleRequest->status) }}</h2>
+        @else
+            <h2 style="color:#155edb; font-size:24px; margin:0;">Your Schedule Request has been {{ ucfirst($scheduleRequest->status) }}</h2>
+        @endif
 
         <p style="font-size:16px; font-weight:600; margin:10px 0;">Details:</p>
         <ul style="font-size:16px; line-height:1.5; padding-left:20px; margin:0;">
