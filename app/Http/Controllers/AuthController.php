@@ -22,13 +22,39 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,avif,webp', 'max:2048'],
+            'birthday' => ['required', 'date', 'before:today'],
+            'chief_complaint' => ['nullable', 'string', 'max:255'],
         ]);
+
+        // $profileImagePath = null;
+
+        // if ($request->hasFile('profile_image')) {
+        //     $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+        // }
+
+        $profileImagePath = null;
+
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+
+            $destinationPath = base_path('../public_html/profile_images');
+
+            $file->move($destinationPath, $filename);
+
+            $profileImagePath = 'profile_images/' . $filename;
+        }
+
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
             'role' => User::ROLE_USER,
+            'profile_image' => $profileImagePath,
+            'birthday' => $data['birthday'],
+            'chief_complaint' => $data['chief_complaint'] ?? null,
         ]);
 
         Auth::login($user);

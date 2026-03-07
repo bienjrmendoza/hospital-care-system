@@ -11,6 +11,7 @@ use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\ScheduleBrowserController;
 use App\Http\Controllers\UserRequestController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AdminVitalController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('index');
@@ -83,5 +84,11 @@ Route::middleware(['auth', 'nocache'])->group(function (): void {
         Route::get('/schedules/feed', [AdminScheduleController::class, 'feed'])->name('admin.schedules.feed');
         Route::put('/schedules/{schedule}', [AdminScheduleController::class, 'update'])->name('admin.schedules.update');
         Route::delete('/schedules/{schedule}', [AdminScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
+
+        Route::get('/vitals', [AdminVitalController::class, 'index'])->name('admin.vitals.index');
+        Route::post('/vitals/export', [AdminVitalController::class, 'export'])->name('admin.vitals.export');
+        Route::get('/vitals/view', [AdminVitalController::class, 'view'])->name('admin.vitals.view');
+        Route::delete('/vitals/{id}', [AdminVitalController::class, 'destroy'])->name('admin.vitals.delete');
+        Route::get('/vitals/history', [VitalController::class, 'history'])->name('admin.vitals.history');
     });
 });

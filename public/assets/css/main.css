@@ -3,8 +3,8 @@
 }
 
 .avatar-trigger {
-    /* width: 55px; */
-    height: 52px;
+    width: 55px!important;
+    height: 55px;
     border-radius: 999px;
     border: 1px solid #e6e8ee;
     background: #fff;
@@ -101,7 +101,8 @@
 }
 
 @media screen and (max-width: 992px){
-    .user-menu-panel {
-        width: 100%;
+    .user-menu-panel,
+    .user-menu .avatar-trigger {
+        width: 100%!important;
     }    
 }
