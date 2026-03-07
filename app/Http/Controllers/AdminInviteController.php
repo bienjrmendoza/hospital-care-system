@@ -110,9 +110,22 @@ class AdminInviteController extends Controller
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,avif,webp', 'max:2048'],
         ]);
 
+        // $profileImagePath = null;
+        // if ($request->hasFile('profile_image')) {
+        //     $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+        // }
+
         $profileImagePath = null;
+
         if ($request->hasFile('profile_image')) {
-            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $file = $request->file('profile_image');
+            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+
+            $destinationPath = base_path('../public_html/profile_images');
+
+            $file->move($destinationPath, $filename);
+
+            $profileImagePath = 'profile_images/' . $filename;
         }
 
         DB::transaction(function () use ($invite, $data, $profileImagePath): void {

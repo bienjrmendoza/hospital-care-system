@@ -20,7 +20,7 @@
         <div class="contact-form card">
             <h4 class="text-secondary mb-3">Register</h4>
             <p class="mb-2">This web portal is for non-emergency outpatient consultation requests only. Please log in below.</p>
-            <form method="POST" action="{{ route('register.store') }}" id="submit-disable">
+            <form method="POST" action="{{ route('register.store') }}" enctype="multipart/form-data" id="submit-disable">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Name</label>
@@ -30,15 +30,33 @@
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control shadow-none" value="{{ old('email') }}" required>
                 </div>
-                <div class="mb-3 position-relative">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control shadow-none" required>
-                    <span onclick="togglePassword('password', 'toggleIcon1')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon1"></i></span>
+                <div class="form-group f-group">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-control shadow-none" required>
+                        <span onclick="togglePassword('password', 'toggleIcon1')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon1"></i></span>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control shadow-none" required>
+                        <span onclick="togglePassword('password_confirmation', 'toggleIcon2')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon2"></i></span>
+                    </div>
                 </div>
-                <div class="mb-3 position-relative">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control shadow-none" required>
-                    <span onclick="togglePassword('password_confirmation', 'toggleIcon2')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon2"></i></span>
+                <div class="form-group f-group">
+                    <div class="mb-3">
+                        <label class="form-label">Profile Image</label>
+                        <input type="file" name="profile_image" class="form-control shadow-none" accept="image/*">
+                        <small class="text-muted" style="font-size:10px;">Optional. JPG, PNG, AVIF, WEBP JPEG max 2MB.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Birthday</label>
+                        <input type="date" name="birthday" class="form-control shadow-none" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Chief Complaint</label>
+                    <!-- <input type="text" name="chief_complaint" class="form-control shadow-none" placeholder="Short description"> -->
+                     <textarea name="chief_complaint" placeholder="Short description of patient complaint" rows="3" class="form-control shadow-none"></textarea>
                 </div>
                 <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Create account <i class="fa-solid fa-arrow-right"></i></button>
             </form>

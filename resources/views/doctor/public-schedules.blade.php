@@ -9,7 +9,8 @@
     <div class="container-profile">
         <div>
             @if($doctor->profile_image)
-                <img src="{{ Str::startsWith($doctor->profile_image, 'http') ? $doctor->profile_image : asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle" />
+                <!-- <img src="{{ Str::startsWith($doctor->profile_image, 'http') ? $doctor->profile_image : asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle" /> -->
+                <img src="{{ Str::startsWith($doctor->profile_image, 'http') ? $doctor->profile_image : asset($doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle" />
             @else
                 <i class="fa-solid fa-user-doctor fa-3x text-secondary"></i>
             @endif

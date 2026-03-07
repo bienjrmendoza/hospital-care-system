@@ -248,6 +248,10 @@ header img {
     right: 15px;
     bottom: 50%;
 }
+
+.admin-dashboard a {
+    font-size: 13px;
+}
 /* DASHBOARD */
 /* DASHBOARD */
 
@@ -284,7 +288,7 @@ header img {
 
 .admin .admin-btn button,
 .admin .admin-btn a {
-    padding: 10px;
+    padding: 10px 20px;
     border-radius: 50px;
     border: none;
     text-transform: uppercase;
@@ -306,6 +310,15 @@ td button {
     font-size: 14px!important;
     width: auto;
     margin-bottom: 10px
+}
+
+.form-group.f-group {
+    display: flex;
+    gap: 20px;
+}
+
+.f-group div {
+    width: 100%;
 }
 /* TABLE */
 /* TABLE */
@@ -431,6 +444,11 @@ td button {
 
     .admin-header .nav-item .nav-link {
         padding: 0;
+    }
+
+    .form-group.f-group {
+        flex-direction: column;
+        gap: 0;
     }
 }
 

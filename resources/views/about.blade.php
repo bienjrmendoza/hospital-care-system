@@ -59,7 +59,8 @@
                                         <div class="swiper-slide">
                                             <div class="card text-center p-4">
                                                 @if($doctor->profile_image)
-                                                    <div style="background-image: url({{ asset('storage/' . $doctor->profile_image) }});background-position: top center; background-size: cover;" class="profile mb-3">
+                                                    <!-- <div style="background-image: url({{ asset('storage/' . $doctor->profile_image) }});background-position: top center; background-size: cover;" class="profile mb-3"> -->
+                                                        <div style="background-image: url('{{ asset($doctor->profile_image) }}'); background-position: top center; background-size: cover;" class="profile mb-3">
                                                         <!-- @if($doctor->profile_image)
                                                             <img src="{{ asset('storage/' . $doctor->profile_image) }}" alt="{{ $doctor->name }}" class="rounded-circle doctors-img" width="80">
                                                         @else
