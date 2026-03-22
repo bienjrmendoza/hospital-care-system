@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Vital;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'profile_image',
         'password',
         'role',
@@ -50,6 +52,11 @@ class User extends Authenticatable
     public function scheduleRequests(): HasMany
     {
         return $this->hasMany(ScheduleRequest::class);
+    }
+
+    public function vitals()
+    {
+        return $this->hasMany(Vital::class);
     }
 
     public function isAdmin(): bool

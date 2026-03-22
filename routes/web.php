@@ -12,6 +12,8 @@ use App\Http\Controllers\ScheduleBrowserController;
 use App\Http\Controllers\UserRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminVitalController;
+use App\Http\Controllers\DoctorVitalPdfController;
+use App\Http\Controllers\UserVitalController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('index');
@@ -49,6 +51,8 @@ Route::middleware(['auth', 'nocache'])->group(function (): void {
         Route::get('/user/dashboard', [UserRequestController::class, 'dashboard'])->name('user.dashboard');
         Route::post('/schedule-requests', [UserRequestController::class, 'store'])->name('schedule-requests.store');
         Route::patch('/schedule-requests/{scheduleRequest}/cancel', [UserRequestController::class, 'cancel'])->name('schedule-requests.cancel');
+        Route::get('/vitals', [UserVitalController::class, 'index'])->name('user.vitals.index');
+        Route::get('/vitals/{vital}/view', [UserVitalController::class, 'view'])->name('user.vitals.view');
     });
 
     Route::prefix('doctor')->middleware('role:doctor')->group(function (): void {
@@ -61,6 +65,11 @@ Route::middleware(['auth', 'nocache'])->group(function (): void {
         Route::get('/requests', [DoctorRequestController::class, 'index'])->name('doctor.requests.index');
         Route::patch('/requests/{scheduleRequest}/accept', [DoctorRequestController::class, 'accept'])->name('doctor.requests.accept');
         Route::patch('/requests/{scheduleRequest}/decline', [DoctorRequestController::class, 'decline'])->name('doctor.requests.decline');
+
+        Route::get('/vitals', [DoctorVitalPdfController::class, 'index'])->name('doctor.vitals.index');
+        Route::post('/vitals/export', [DoctorVitalPdfController::class, 'export'])->name('doctor.vitals.export');
+        Route::get('/vitals/view', [DoctorVitalPdfController::class, 'view'])->name('doctor.vitals.view');
+        Route::delete('/vitals/{id}', [DoctorVitalPdfController::class, 'destroy'])->name('doctor.vitals.delete');
     });
 
     Route::prefix('admin')->middleware('role:admin')->group(function (): void {
@@ -89,6 +98,6 @@ Route::middleware(['auth', 'nocache'])->group(function (): void {
         Route::post('/vitals/export', [AdminVitalController::class, 'export'])->name('admin.vitals.export');
         Route::get('/vitals/view', [AdminVitalController::class, 'view'])->name('admin.vitals.view');
         Route::delete('/vitals/{id}', [AdminVitalController::class, 'destroy'])->name('admin.vitals.delete');
-        Route::get('/vitals/history', [VitalController::class, 'history'])->name('admin.vitals.history');
+        Route::get('/vitals/history', [AdminVitalController::class, 'history'])->name('admin.vitals.history');
     });
 });

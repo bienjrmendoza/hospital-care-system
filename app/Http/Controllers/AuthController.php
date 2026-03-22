@@ -21,6 +21,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'confirmed', Password::min(8)],
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,avif,webp', 'max:2048'],
             'birthday' => ['required', 'date', 'before:today'],
@@ -50,6 +51,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => $data['password'],
             'role' => User::ROLE_USER,
             'profile_image' => $profileImagePath,
@@ -70,12 +72,22 @@ class AuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
-            return back()->withErrors(['email' => 'Invalid credentials.'])->onlyInput('email');
+        $login_type = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) 
+            ? 'email' 
+            : 'phone';
+
+        if (!Auth::attempt([
+            $login_type => $credentials['login'],
+            'password' => $credentials['password']
+        ], $request->boolean('remember'))) {
+
+            return back()->withErrors([
+                'login' => 'Invalid credentials.'
+            ])->onlyInput('login');
         }
 
         $request->session()->regenerate();

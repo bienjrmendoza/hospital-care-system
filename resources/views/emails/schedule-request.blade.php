@@ -26,6 +26,7 @@
     <p style="font-size:16px; font-weight:600; margin:15px 0 5px 0;">Request Details:</p>
     <ul style="font-size:16px; line-height:1.5; padding-left:20px; margin:0;">
         <li><strong>Patient:</strong> {{ $scheduleRequest->user->name }}</li>
+        <li><strong>Chief Complaint:</strong> {{ $scheduleRequest->user->chief_complaint }}</li>
         <li><strong>Date:</strong> {{ $scheduleRequest->schedule->date->format('F j, Y') }}</li>
         <li><strong>Time:</strong> {{ \Carbon\Carbon::parse($scheduleRequest->schedule->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($scheduleRequest->schedule->end_time)->format('g:i A') }}</li>
     </ul>

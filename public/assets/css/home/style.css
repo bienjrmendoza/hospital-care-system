@@ -15,6 +15,13 @@
     width: 100%;
     height: 300px;
     justify-content: center;
+    transition: all 0.3s ease;
+    border-bottom: 7px solid var(--tertiary) !important;
+}
+
+.secondary-hover:hover p.text-white,
+.secondary-hover:hover h3.text-white  {
+    color: var(--secondary)!important;
 }
 
 .hero .card h3 {

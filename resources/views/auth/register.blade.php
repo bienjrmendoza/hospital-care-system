@@ -30,6 +30,10 @@
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control shadow-none" value="{{ old('email') }}" required>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" name="phone" class="form-control shadow-none" value="{{ old('phone') }}" pattern="^(09|\+639)\d{9}$" required>
+                </div>
                 <div class="form-group f-group">
                     <div class="mb-3 position-relative">
                         <label class="form-label">Password</label>
@@ -56,7 +60,7 @@
                 <div class="mb-3">
                     <label class="form-label">Chief Complaint</label>
                     <!-- <input type="text" name="chief_complaint" class="form-control shadow-none" placeholder="Short description"> -->
-                     <textarea name="chief_complaint" placeholder="Short description of patient complaint" rows="3" class="form-control shadow-none"></textarea>
+                     <textarea name="chief_complaint" placeholder="Short description of patient complaint" rows="3" class="form-control shadow-none" required></textarea>
                 </div>
                 <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Create account <i class="fa-solid fa-arrow-right"></i></button>
             </form>

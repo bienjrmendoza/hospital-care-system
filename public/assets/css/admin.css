@@ -175,6 +175,7 @@ h3, h4, h5 {
 
 button, li a, li span {
     font-weight: 500!important;
+    transition: all 0.3s ease;
 }
 
 button {
@@ -192,14 +193,27 @@ p, label, li {
     border-radius: 50px;
     border: none;
     text-transform: uppercase;
+    border-bottom: 7px solid var(--tertiary)!important;
+    transition: all 0.3s ease;
 }
 
 .secondary-hover:hover {
-    background-color: var(--secondary)!important;
+    background-color: var(--tertiary)!important;
+    border-bottom: 7px solid var(--secondary)!important;
+    color: var(--secondary)!important;
+    text-decoration: none!important;
+}
+
+a:hover {
+    text-underline-position: under;
+    text-decoration: underline;
+    color: var(--primary)!important;
 }
 
 .secondary-hover {
     transition: background-color 0.3s ease;
+    border-bottom: 7px solid var(--tertiary)!important;
+    border: none;
 }
 
 /* HEADER */
@@ -239,6 +253,7 @@ header img {
     padding: 0 !important;
     text-align: left;
     color: var(--primary);
+    border-bottom: none !important;
 }
 
 #toggleIcon1, 
@@ -251,6 +266,19 @@ header img {
 
 .admin-dashboard a {
     font-size: 13px;
+}
+
+.doctor-requests td {
+    width: 0;
+}
+
+td a:hover {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.menu-links a.nav-link {
+    padding: 0 6px !important;
 }
 /* DASHBOARD */
 /* DASHBOARD */
@@ -292,6 +320,7 @@ header img {
     border-radius: 50px;
     border: none;
     text-transform: uppercase;
+    border-bottom: 7px solid var(--tertiary);
 }
 
 .admin th {
@@ -357,6 +386,10 @@ td button {
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
+}
+
+.admin-dashboard .card-body {
+    min-height: 122px;
 }
 /* MOBILE START */
 @media screen and (max-width: 1024px) {
@@ -473,6 +506,10 @@ td button {
     button {
         font-size: 14px!important;
     }
+
+    .admin-dashboard .card-body {
+        min-height: 100%;
+    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -501,3 +538,20 @@ td button {
     }
 }
 /* MOBILE END */
+
+
+.report-notice {
+    height: 15px !important;
+    width: 15px !important;
+    background: red;
+    position: absolute;
+    border-radius: 100%;
+    top: -10px;
+    right: -7px;
+}
+
+@media screen and (max-width: 992px){
+    .report-notice {
+        left: 65px;
+    }
+}
