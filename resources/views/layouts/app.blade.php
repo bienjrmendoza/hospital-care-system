@@ -58,10 +58,23 @@
                     @endauth
                 </ul> -->
                 <ul class="navbar-nav ms-auto menu-links align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('index') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('home') }}">Schedules</a></li>
                     @auth
                         @if(auth()->user()->isUser())
                             <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('user.dashboard') }}">My Requests</a></li>
+                            @if(auth()->user()->vitals()->exists())
+                                <li class="nav-item position-relative">
+                                    <a class="nav-link text-secondary" href="{{ route('user.vitals.index') }}">
+                                            <i class="fa-solid fa-bell d-none d-lg-inline" style="font-size: 20px;"></i>
+                                            <span class="d-inline d-lg-none">REPORT</span>
+                                    </a>
+                                    <span class="report-notice">
+                                        
+                                    </span>
+                                </li>
+                            @endif
                         @endif
                         @if(auth()->user()->isDoctor())
                             <li class="nav-item"><a class="nav-link text-secondary" href="{{ route('doctor.dashboard') }}">Dashboard</a></li>

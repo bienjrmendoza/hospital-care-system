@@ -23,18 +23,15 @@
             <form method="POST" action="{{ route('login.store') }}" id="submit-disable">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control shadow-none" value="{{ old('email') }}" required>
+                    <label class="form-label">Email or Phone</label>
+                    <!-- <input type="email" name="email" class="form-control shadow-none" value="{{ old('email') }}" required> -->
+                    <input type="text" name="login" class="form-control shadow-none" value="{{ old('login') }}" required>
                 </div>
                 <div class="mb-3 position-relative">
                     <label class="form-label">Password</label>
                     <input type="password" name="password" id="password" class="form-control shadow-none" required>
                     <span onclick="togglePassword('password', 'toggleIcon1')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon1"></i></span>
                 </div>
-                <!-- <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input shadow-none" id="remember" name="remember" value="1">
-                    <label class="form-check-label" for="remember">Remember me</label>
-                </div> -->
                 <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Sign in <i class="fa-solid fa-arrow-right"></i></button>
             </form>
         </div>

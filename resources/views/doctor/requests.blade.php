@@ -6,7 +6,7 @@
 </div>
 <h3 class="text-secondary mb-3">Doctor Requests Inbox</h3>
 
-<div class="card shadow-sm" id="doctorRequestsTableWrap">
+<div class="card shadow-sm doctor-requests" id="doctorRequestsTableWrap">
     <div class="table-responsive">
         <table class="table table-striped mb-0">
             <thead>
@@ -15,7 +15,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
-                <th>Notes</th>
+                <th>Chief Complaint</th>
                 <th></th>
             </tr>
             </thead>
@@ -36,7 +36,14 @@
                             <span class="badge text-bg-danger">{{ ucfirst($request->status) }}</span>
                         @endif
                     </td>
-                    <td>{{ $request->notes }}</td>
+                    <td>
+                        @if($request->notes)
+                            {{ $request->notes }}<br>
+                        @endif
+                        @if($request->user->chief_complaint)
+                            {{ $request->user->chief_complaint }}
+                        @endif
+                    </td>
                     <td class="text-end">
                         @if($request->status === 'pending')
                             <button class="btn btn-sm btn-success accept-btn" data-id="{{ $request->id }}">Accept</button>

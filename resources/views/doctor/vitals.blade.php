@@ -7,21 +7,20 @@
     </button>
 </div>
 
-<h3 class="text-secondary mb-3">Generate Vital Signs Report</h3>
+<h3 class="text-secondary mb-3">Vital Signs Report</h3>
 
 <div class="card mb-4">
     <div class="card-body admin-btn">
-        <form id="pdfForm" method="POST" action="{{ route('admin.vitals.export') }}" target="_blank">
+        <form id="pdfForm" method="POST" action="{{ route('doctor.vitals.export') }}" target="_blank">
             @csrf
             <div class="row g-3">
+
                 <div class="col-md-6">
                     <label class="form-label">Select Patient</label>
                     <select class="form-select shadow-none" name="user_id" required>
                         <option value="">Choose patient</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">
-                                {{ $user->name }} ({{ $user->email }})
-                            </option>
+                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
                         @endforeach
                     </select>
                 </div>
@@ -29,6 +28,7 @@
                     <label class="form-label">Date</label>
                     <input type="date" name="date" class="form-control shadow-none" required>
                 </div>
+
                 <div class="col-md-4">
                     <label class="form-label">Blood Pressure</label>
                     <input type="text" name="blood_pressure" class="form-control shadow-none" placeholder="120/80">
@@ -83,39 +83,38 @@
     <div class="card-body">
         <h5 class="text-secondary mb-3">History of Generated PDFs</h5>
         @if($vitals->count() > 0)
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Patient</th>
-                    <th>Email</th>
-                    <th>Generated At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($vitals as $vital)
-                <tr>
-                    <td>{{ $vital->date }}</td>
-                    <td>{{ $vital->user->name }}</td>
-                    <td>{{ $vital->user->email }}</td>
-                    <td>{{ $vital->created_at->format('Y-m-d H:i') }}</td>
-                    <td>
-                        <a href="{{ route('admin.vitals.view', ['vital_id'=>$vital->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                            View PDF
-                        </a>
-                        <form action="{{ route('admin.vitals.delete', $vital->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button id="confirmDeleteSpecializationBtn" class="btn btn-sm btn-outline-danger mb-0" data-id="{{ $vital->id }}">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient</th>
+                        <th>Email</th>
+                        <th>Generated At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php $vital = $vitals->first(); @endphp
+                    @foreach($vitals as $vital)
+                    <tr>
+                        <td>{{ $vital->date }}</td>
+                        <td>{{ $vital->user->name }}</td>
+                        <td>{{ $vital->user->email }}</td>
+                        <td>{{ $vital->created_at->format('Y-m-d H:i') }}</td>
+                        <td>
+                            <a href="{{ route('doctor.vitals.view', ['vital_id'=>$vital->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary">View PDF</a>
+                            <form action="{{ route('doctor.vitals.delete', $vital->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger mb-0">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @else
             <p class="text-muted">No vitals reports generated yet.</p>
         @endif
@@ -125,34 +124,33 @@
 
 @push('scripts')
 <script>
-    function calculateBMI(){
-        let weight = parseFloat(document.getElementById('weight').value);
-        let height = parseFloat(document.getElementById('height').value);
-        if(weight && height){
-            height = height / 100;
-            let bmi = weight / (height * height);
-            document.getElementById('bmi').value = bmi.toFixed(2);
-        } else {
-            document.getElementById('bmi').value = '';
-        }
+function calculateBMI(){
+    let weight = parseFloat(document.getElementById('weight').value);
+    let height = parseFloat(document.getElementById('height').value);
+    if(weight && height){
+        height = height / 100;
+        let bmi = weight / (height * height);
+        document.getElementById('bmi').value = bmi.toFixed(2);
+    } else {
+        document.getElementById('bmi').value = '';
     }
+}
 
-    document.getElementById('weight').addEventListener('input', calculateBMI);
-    document.getElementById('height').addEventListener('input', calculateBMI);
-    
-    const pdfForm = document.getElementById('pdfForm');
-    pdfForm.addEventListener('submit', function(e) {
-        const toast = document.createElement('div');
-        toast.innerText = 'PDF is being generated...';
-        toast.className = 'toast-notification';
-        document.body.appendChild(toast);
+document.getElementById('weight').addEventListener('input', calculateBMI);
+document.getElementById('height').addEventListener('input', calculateBMI);
 
-        setTimeout(() => toast.remove(), 3000);
+const pdfForm = document.getElementById('pdfForm');
+pdfForm.addEventListener('submit', function(e) {
+    const toast = document.createElement('div');
+    toast.innerText = 'PDF is being generated...';
+    toast.className = 'toast-notification';
+    document.body.appendChild(toast);
 
-        setTimeout(() => {
-            pdfForm.reset();
-            document.getElementById('bmi').value = '';
-        }, 500);
-    });
+    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => {
+        pdfForm.reset();
+        document.getElementById('bmi').value = '';
+    }, 500);
+});
 </script>
 @endpush
