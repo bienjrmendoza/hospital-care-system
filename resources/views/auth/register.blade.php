@@ -37,8 +37,14 @@
                 <div class="form-group f-group">
                     <div class="mb-3 position-relative">
                         <label class="form-label">Password</label>
-                        <input type="password" id="password" name="password" class="form-control shadow-none" required>
+                        <input type="password" id="password" name="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" title="Password must be at least 8 characters and include 1 uppercase letter, 1 number, and 1 special character" class="form-control shadow-none" required>
                         <span onclick="togglePassword('password', 'toggleIcon1')" ><i class="fa-solid fa-eye toggle-password text-secondary" id="toggleIcon1"></i></span>
+                        <div id="passwordPopup" class="password-popup">
+                            <small id="length" class="text-danger d-block">✖ At least 8 characters</small>
+                            <small id="uppercase" class="text-danger d-block">✖ At least 1 uppercase letter</small>
+                            <small id="number" class="text-danger d-block">✖ At least 1 number</small>
+                            <small id="symbol" class="text-danger d-block">✖ At least 1 special character</small>
+                        </div>
                     </div>
                     <div class="mb-3 position-relative">
                         <label class="form-label">Confirm Password</label>
@@ -62,7 +68,10 @@
                     <!-- <input type="text" name="chief_complaint" class="form-control shadow-none" placeholder="Short description"> -->
                      <textarea name="chief_complaint" placeholder="Short description of patient complaint" rows="3" class="form-control shadow-none" required></textarea>
                 </div>
-                <button class="bg-primary text-white button secondary-hover" type="submit" id="submit-btn">Create account <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="bg-primary text-white button secondary-hover mb-3" type="submit" id="submit-btn">Create account <i class="fa-solid fa-arrow-right"></i></button>
+                <div class="dont-have mb-0">
+                    <p>Already have an account? <a class="text-primary" href="{{ route('login') }}">Login now</a></p>
+                </div>
             </form>
         </div>
     </div>
@@ -74,7 +83,43 @@
         btn.disabled = true;
         btn.innerHTML = 'CREATING ACCOUNT... <span class="spinner-border spinner-border-sm"></span>';
     });
-    </script>
+
+    const passwordInput = document.getElementById('password');
+    const popup = document.getElementById('passwordPopup');
+
+    const lengthCheck = document.getElementById('length');
+    const uppercaseCheck = document.getElementById('uppercase');
+    const numberCheck = document.getElementById('number');
+    const symbolCheck = document.getElementById('symbol');
+
+    passwordInput.addEventListener('focus', () => {
+        popup.classList.add('show');
+    });
+
+    passwordInput.addEventListener('input', () => {
+        popup.classList.add('show');
+
+        const value = passwordInput.value;
+
+        toggleCheck(value.length >= 8, lengthCheck, "At least 8 characters");
+        toggleCheck(/[A-Z]/.test(value), uppercaseCheck, "At least 1 uppercase letter");
+        toggleCheck(/\d/.test(value), numberCheck, "At least 1 number");
+        toggleCheck(/[^A-Za-z0-9]/.test(value), symbolCheck, "At least 1 special character");
+    });
+
+    passwordInput.addEventListener('blur', () => {
+        setTimeout(() => popup.classList.remove('show'), 150);
+    });
+
+    function toggleCheck(condition, element, text) {
+        if (condition) {
+            element.textContent = "✔ " + text;
+            element.classList.replace("text-danger", "text-success");
+        } else {
+            element.textContent = "✖ " + text;
+            element.classList.replace("text-success", "text-danger");
+        }
+    }
 </script>
 @endsection
 

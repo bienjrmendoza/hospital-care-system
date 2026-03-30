@@ -20,6 +20,11 @@ class Vital extends Model
         'bmi',
         'notes',
         'initial_assessment',
+        'diagnostic',
+        'medication',
+        'treatment',
+        'diet',
+        'remarks',
     ];
 
     public function user()
