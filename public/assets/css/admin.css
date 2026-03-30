@@ -185,7 +185,7 @@ button {
 
 p, label, li {
     font-size: 16px;
-    line-height: 29px;
+    /* line-height: 29px; */
 }
 
 .button {
@@ -290,10 +290,14 @@ td a:hover {
 }
 
 .contact-form input, .contact-form textarea {
-    padding: 10px;
+    padding: 10px 20px;
     width: 100%;
     border-radius: 15px;
     border: 1px solid #d1d1d1;
+}
+
+.login input {
+    padding: 10px 10px 10px 40px;
 }
 
 #remember {
@@ -391,6 +395,44 @@ td button {
 .admin-dashboard .card-body {
     min-height: 122px;
 }
+
+.password-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    font-size: 12px;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.password-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.assessment td:nth-child(2),
+.assessment td:nth-child(3){
+    width: 30%;
+}
+
+.icon {
+    top: 42px;
+    left: 12px;
+    color: var(--primary);
+    font-size: 17px;
+}
 /* MOBILE START */
 @media screen and (max-width: 1024px) {
     h1, h2, h3, h4, h5, p, span {
@@ -482,6 +524,14 @@ td button {
     .form-group.f-group {
         flex-direction: column;
         gap: 0;
+    }
+
+    .icon {
+        top: 50px;
+    }
+
+    .table-responsive a {
+        margin-bottom: 10px;
     }
 }
 

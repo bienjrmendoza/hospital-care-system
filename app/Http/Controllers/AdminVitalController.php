@@ -32,6 +32,11 @@ class AdminVitalController extends Controller
             'height' => 'nullable|numeric',
             'notes' => 'nullable|string',
             'initial_assessment' => 'nullable|string',
+            'diagnostic' => 'nullable|string',
+            'medication' => 'nullable|string',
+            'treatment' => 'nullable|string',
+            'diet' => 'nullable|string',
+            'remarks' => 'nullable|string',
         ]);
 
         $user = User::findOrFail($data['user_id']);
@@ -56,6 +61,11 @@ class AdminVitalController extends Controller
             'bmi' => $bmi,
             'notes' => $data['notes'] ?? null,
             'initial_assessment' => $data['initial_assessment'] ?? null,
+            'diagnostic' => $data['diagnostic'] ?? null,
+            'medication' => $data['medication'] ?? null,
+            'treatment' => $data['treatment'] ?? null,
+            'diet' => $data['diet'] ?? null,
+            'remarks' => $data['remarks'] ?? null,
         ]);
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.pdf.vitals', [

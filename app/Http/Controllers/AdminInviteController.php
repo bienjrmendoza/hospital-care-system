@@ -106,7 +106,7 @@ class AdminInviteController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,avif,webp', 'max:2048'],
         ]);
 
